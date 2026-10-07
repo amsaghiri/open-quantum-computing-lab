@@ -1,0 +1,22 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Q05 Bell State Under Noise | OQCL</title><link rel="stylesheet" href="../assets/style.css"></head><body><header><b>OQCL</b> &nbsp; <a href="../index.html">Home</a><a href="../contents.html">Textbook</a><a href="../projects.html">Projects</a><a href="../quest-lab.html">QUEST Lab</a><a href="../submit.html">Submit</a><a href="../instructor.html">Instructor Guide</a><a href="../references.html">References</a></header><main><h1>Q05 — Bell State Under Noise</h1>
+    <p><span class="badge">Mini</span><span class="badge">50–80 min</span><span class="badge">Noisy simulator</span></p>
+    <p><b>Scientific objective:</b> Quantify how a controlled noise parameter changes Bell correlations.</p>
+    <p><b>Prerequisite reading:</b> <a href="../chapters/ch03.html">Chapter 3 — Multiple Qubits, Tensor Products, and Entanglement</a>.</p>
+    <h2>Before you code</h2><ol><li>Write the state, operation, Hamiltonian, or protocol quantity relevant to this experiment.</li><li>Write a qualitative prediction.</li><li>Define the metric you will use to decide whether the prediction was supported.</li></ol>
+    <h2>Baseline experiment</h2><div class="project"><p>Start from Q04. Add one noise model at three controlled strengths. Keep all other settings fixed and plot correlation versus noise.</p></div>
+    <h2>Step-by-step workflow</h2><ol>
+    <li>Create <code>projects/q05-yourgithubname/</code>.</li><li>Write the hypothesis in README.md before running.</li>
+    <li>Implement the smallest baseline in <code>notebook.ipynb</code>.</li><li>Run the simulator baseline and save raw counts/data.</li>
+    <li>Calculate the required metric numerically; do not rely only on visual inspection.</li><li>Create at least one labeled figure or table.</li>
+    <li>Change exactly one primary experimental variable for the extension.</li><li>Repeat the measurement with all other controls fixed.</li>
+    <li>Explain agreement, disagreement, uncertainty, and limitations in REPORT.md.</li></ol>
+    <h2>Required upload</h2><table><tr><th>File</th><th>Purpose</th></tr>
+    <tr><td>README.md</td><td>Question, hypothesis, reproduction instructions, runtime/backend.</td></tr>
+    <tr><td>notebook.ipynb</td><td>Executable experiment and analysis.</td></tr>
+    <tr><td>results/raw/</td><td>Machine-readable counts/data; never credentials.</td></tr>
+    <tr><td>results/figures/</td><td>Labeled plots/diagrams generated from results.</td></tr>
+    <tr><td>REPORT.md</td><td>Baseline, extension, interpretation, uncertainty, limitations, conclusion.</td></tr></table>
+    <h2>Time and execution estimate</h2><p><b>Student work:</b> 50–80 min. <b>Execution:</b> Noisy simulator. Simulator runtime is normally a small fraction of student working time for these teaching-scale examples. QPU queue and cost are provider-dependent and must be recorded rather than guessed.</p>
+    
+    <h2>Research extension</h2><p>Propose one controlled extension that changes a scientifically meaningful variable. State the prediction before execution. A failed prediction is acceptable when the experiment is reproducible and the analysis is sound.</p>
+    <h2>Submission</h2><p>Claim the project through a GitHub Issue before beginning graded work. Submit the completed folder through a Pull Request and complete the repository checklist.</p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>
