@@ -1,17 +1,22 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Session 6 — Near-term methods: Hamiltonians and variational circuits | OQCL</title><meta name="description" content="Quantum in 7 Sessions, session 6: A quantum circuit with adjustable angles, tuned by a classical loop."><link rel="stylesheet" href="../assets/style.css"></head><body><header><b>OQCL</b> &nbsp; <a href="../index.html">Home</a><a href="../start-here.html">Start Here</a><a href="../sessions.html">7 Sessions</a><a href="../contents.html">Textbook</a><a href="../projects.html">Projects</a><a href="../quest-lab.html">QUEST Lab</a><a href="../submit.html">Submit</a><a href="../use-cases.html">Use Cases</a><a href="../instructor.html">Instructor Guide</a><a href="../references.html">References</a></header><main><p class="crumbs"><a href="../sessions.html">Quantum in 7 Sessions</a> › Session 6</p>
 <div class="sessnav" aria-label="Sessions"><a class="" href="s1.html" title="Session 1">1</a><a class="" href="s2.html" title="Session 2">2</a><a class="" href="s3.html" title="Session 3">3</a><a class="" href="s4.html" title="Session 4">4</a><a class="" href="s5.html" title="Session 5">5</a><a class="on" href="s6.html" title="Session 6">6</a><a class="" href="s7.html" title="Session 7">7</a></div>
 <h1>Session 6 — Near-term methods: Hamiltonians and variational circuits</h1>
-<p><span class="badge">Session 6 of 7</span><span class="badge">Simulator only</span></p>
+<p><span class="badge">Session 6 of 7</span><span class="badge">Self-study</span><span class="badge">Simulator only</span></p>
 <div class="note"><b>By the end of this session you can</b> say what an expectation value is, describe the hybrid loop used by VQE and QAOA, and explain why a classical baseline is always required.</div>
+<p class="toc"><b>On this page:</b> <a href="#read">Read</a> · <a href="#ideas">Key ideas</a> · <a href="#worked">Worked example</a> · <a href="#try">Try it</a> · <a href="#second">Second experiment</a> · <a href="#mistakes">Common mistakes</a> · <a href="#check">Check yourself</a> · <a href="#project">Project</a></p>
 
-<h2>1. Read</h2>
+<h2 id="read">1. Read</h2>
 <ul><li><a href="../chapters/ch08.html">Chapter 8 — Hamiltonians, Dynamics, and Trotterization</a></li><li><a href="../chapters/ch09.html">Chapter 9 — Variational and Hybrid Quantum Algorithms</a></li><li><a href="../chapters/ch10.html">Chapter 10 — Quantum Machine Learning</a></li></ul>
 <p>Read the chapters first. The summary below is a reminder, not a replacement.</p>
 
-<h2>2. Key ideas</h2>
+<h2 id="ideas">2. Key ideas</h2>
 <ul><li>A <b>Hamiltonian</b> describes the energy of a system. Measuring an operator many times gives its <b>expectation value</b>, the average result.</li><li>A <b>parameterized circuit</b> has gates with adjustable angles. Different angles prepare different trial states.</li><li>The <b>hybrid loop</b>: the quantum circuit prepares a trial state and estimates the energy; a classical optimizer chooses the next angles. VQE, QAOA, and variational classifiers all follow this pattern.</li><li>At teaching sizes a classical computer solves these problems easily. A small demonstration is never evidence of quantum advantage, so always compare with an exact or classical answer.</li></ul>
 
-<h2>3. Try it</h2>
+<h2 id="worked">3. Worked example</h2>
+<p>Work through this with pen and paper before touching the code.</p>
+<div class="example"><p><b>From counts to an expectation value.</b> The state Ry(θ)|0⟩ is cos(θ/2)|0⟩ + sin(θ/2)|1⟩.</p><ol><li>P(0) = cos²(θ/2) and P(1) = sin²(θ/2).</li><li>Z gives +1 for outcome 0 and −1 for outcome 1, so ⟨Z⟩ = P(0) − P(1) = cos²(θ/2) − sin²(θ/2) = cos θ.</li><li>Suppose 1,000 shots give 250 zeros and 750 ones. Then ⟨Z⟩ ≈ 0.25 − 0.75 = −0.5.</li><li>cos θ = −0.5 means θ = 2π/3, or 120°.</li></ol><p>This is how an energy is estimated on real hardware: from counts, not from the state itself.</p></div>
+
+<h2 id="try">4. Try it</h2>
 <p>A one-qubit version of the variational idea: find the angle θ that minimizes the expectation value of Z for the state Ry(θ)|0⟩. Write down what you expect before you run the code.</p>
 <pre>import numpy as np
 from qiskit import QuantumCircuit
@@ -36,10 +41,37 @@ print(&quot;at theta =&quot;, round(thetas[best], 3), &quot;(pi =&quot;, round(n
 at theta = 3.142 (pi = 3.142 )</pre>
 <div class="example"><h3>What to notice</h3><p>The lowest value is −1 at θ = π, where Ry(θ) has rotated |0⟩ into |1⟩. For this state ⟨Z⟩ = cos θ, so you can check the answer by hand. That hand calculation is the classical baseline; in a real problem you would compare against exact diagonalization or brute force.</p></div>
 
-<h2>4. Check yourself</h2>
-<ol><li>Replace Z by X in the code. At which angle is ⟨X⟩ lowest? Work it out first.</li><li>On a real device you would estimate ⟨Z⟩ from counts as P(0) − P(1). How does the number of shots affect the optimizer?</li><li>Why is “my VQE found the right energy for a tiny molecule” not a claim of advantage?</li></ol>
+<h2 id="second">5. Second experiment</h2>
+<p>Repeat the scan with the operator X instead of Z. Predict first.</p>
+<pre>import numpy as np
+from qiskit import QuantumCircuit
+from qiskit.quantum_info import Statevector, SparsePauliOp
 
-<h2>5. Do a project</h2>
+X = SparsePauliOp(&quot;X&quot;)
+thetas = np.linspace(0, 2 * np.pi, 41)
+values = []
+for t in thetas:
+    qc = QuantumCircuit(1)
+    qc.ry(t, 0)
+    values.append(Statevector(qc).expectation_value(X).real)   # &lt;X&gt; = sin(theta)
+
+best = int(np.argmin(values))
+print(&quot;lowest &lt;X&gt;:&quot;, round(values[best], 3), &quot;at theta =&quot;, round(thetas[best], 3),
+      &quot;(3*pi/2 =&quot;, round(1.5 * np.pi, 3), &quot;)&quot;)</pre>
+<p><b>Output:</b></p>
+<pre>lowest &lt;X&gt;: -1.0 at theta = 4.712 (3*pi/2 = 4.712 )</pre>
+<div class="example"><h3>What it shows</h3><p>The minimum is −1 at θ = 3π/2. For this state ⟨X⟩ = sin θ, so the result can be checked by hand. A different operator has its minimum at a different angle: the “best” circuit depends on the question you ask.</p></div>
+
+<h2 id="mistakes">6. Common mistakes and tips</h2>
+<div class="problem"><h3>Common mistakes</h3><ul><li>Treating a variational result as exact. It is an estimate with sampling error, and the optimizer may stop in a local minimum.</li><li>Skipping the classical baseline. At teaching sizes the exact answer is always available, so compare against it.</li><li>Calling a small successful demonstration “quantum advantage”.</li></ul></div>
+<div class="teach"><h3>Tips</h3><ul><li>Plot the whole energy curve for a one-parameter problem before trusting any optimizer.</li><li>Estimate ⟨Z⟩ as P(0) − P(1). Its sampling error is at most about 1/√shots.</li><li>Change one thing at a time: the ansatz, the optimizer, or the number of shots.</li></ul></div>
+
+<h2 id="check">7. Check yourself</h2>
+<p>Answer each question on paper, then open the answer to compare.</p>
+<ol class="qa"><li>Replace Z by X in the code. At which angle is ⟨X⟩ lowest? Work it out first.<details><summary>Show answer</summary><p>At θ = 3π/2, where ⟨X⟩ = sin θ = −1. See the second experiment.</p></details></li><li>On a real device you would estimate ⟨Z⟩ from counts as P(0) − P(1). How does the number of shots affect the optimizer?<details><summary>Show answer</summary><p>Each energy estimate carries random error of roughly 1/√shots. If two angles differ in energy by less than that, the optimizer cannot tell which is better and may wander.</p></details></li><li>Why is “my VQE found the right energy for a tiny molecule” not a claim of advantage?<details><summary>Show answer</summary><p>A classical computer solves a tiny instance exactly and instantly. Getting the right answer shows the method works, not that it beats classical computing.</p></details></li></ol>
+
+<h2 id="project">8. Do a project</h2>
 <p>Pick one. Each follows the routine from <a href="../guide-first-project.html">Guide 1</a>: predict, run the baseline, change one variable, analyze.</p>
 <div class="project"><ul><li><a href="../projects/q16.html">Q16</a> Ising Trotter Study</li><li><a href="../projects/q18.html">Q18</a> VQE Energy Estimation</li><li><a href="../projects/q19.html">Q19</a> QAOA Max-Cut</li><li><a href="../projects/q20.html">Q20</a> Variational Quantum Classifier</li></ul></div>
-<p class="actions"><a class="button ghost" href="s5.html">← Session 5</a><a class="button" href="s7.html">Session 7: Communication, benchmarking, and your own project →</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>
+<p class="actions"><a class="button ghost" href="s5.html">← Session 5</a><a class="button" href="s7.html">Session 7: Communication, benchmarking, and your own project →</a></p>
+<p class="crumbs" style="margin-top:28px">For instructors: <a href="t6.html">Teacher notes for Session 6</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>

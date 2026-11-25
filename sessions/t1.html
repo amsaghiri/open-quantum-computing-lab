@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Teacher notes — Session 1 | OQCL</title><meta name="description" content="Instructor notes for session 1 of Quantum in 7 Sessions: timing, board example, misconceptions, and exit question."><link rel="stylesheet" href="../assets/style.css"></head><body><header><b>OQCL</b> &nbsp; <a href="../index.html">Home</a><a href="../start-here.html">Start Here</a><a href="../sessions.html">7 Sessions</a><a href="../contents.html">Textbook</a><a href="../projects.html">Projects</a><a href="../quest-lab.html">QUEST Lab</a><a href="../submit.html">Submit</a><a href="../use-cases.html">Use Cases</a><a href="../instructor.html">Instructor Guide</a><a href="../references.html">References</a></header><main><p class="crumbs"><a href="../instructor.html">Instructor Guide</a> › <a href="../sessions.html">7 Sessions</a> › Teacher notes</p>
+<div class="sessnav" aria-label="Teacher notes"><a class="on" href="t1.html" title="Session 1">1</a><a class="" href="t2.html" title="Session 2">2</a><a class="" href="t3.html" title="Session 3">3</a><a class="" href="t4.html" title="Session 4">4</a><a class="" href="t5.html" title="Session 5">5</a><a class="" href="t6.html" title="Session 6">6</a><a class="" href="t7.html" title="Session 7">7</a></div>
+<h1>Teacher notes — Session 1: Qubits and amplitudes</h1>
+<p><span class="badge">For instructors</span><span class="badge">Flipped format</span></p>
+<div class="note"><b>The session in one sentence.</b> A qubit is described by two complex amplitudes, and probabilities come from their squared magnitudes.</div>
+<p>The <a href="s1.html">student page for Session 1</a> is written for self-study: students can read, work the example, run both experiments, and check their own answers without you. These notes are for the class time you do have.</p>
+
+<h2>Before class (students, on their own)</h2>
+<ul><li>Read <a href="../chapters/ch01.html">Chapter 1</a>.</li><li>Do the worked example and the first experiment on the <a href="s1.html">student page</a>.</li><li>Bring one written prediction and one question.</li></ul>
+
+<h2>If you have 20 minutes</h2>
+<table><tr><th>Minutes</th><th>What to do</th></tr>
+<tr><td>0–3</td><td>Ask the exit question below cold, and take a show of hands. Do not give the answer yet.</td></tr>
+<tr><td>3–10</td><td>Board: the worked example from the student page, with students supplying each step.</td></tr>
+<tr><td>10–16</td><td>Live demo: run the second experiment. Collect predictions first, then run it.</td></tr>
+<tr><td>16–20</td><td>Return to the exit question, settle it, and assign the project.</td></tr></table>
+
+<h2>If you have a full 75-minute class</h2>
+<table><tr><th>Minutes</th><th>Activity</th></tr>
+<tr><td>0–10</td><td>Motivating question and show of hands.</td></tr>
+<tr><td>10–30</td><td>The three points below, with the mathematics on the board.</td></tr>
+<tr><td>30–45</td><td>Worked example at the board, students supplying steps.</td></tr>
+<tr><td>45–55</td><td>Misconceptions: put each “common mistake” to the class as a true/false statement.</td></tr>
+<tr><td>55–65</td><td>Live demo of both experiments, predictions first.</td></tr>
+<tr><td>65–75</td><td>Project briefing and exit question.</td></tr></table>
+
+<h2>Three points to make</h2>
+<ol><li>A bit has a value. A qubit has two amplitudes, and we only ever see samples.</li><li>Born rule on the board with one numeric example.</li><li>Same probabilities does not mean same state: show the two states from the Try-it code.</li></ol>
+
+<h2>Board example</h2>
+<div class="example"><p><b>Normalize 3|0⟩ + 4i|1⟩ and find the probabilities.</b></p><ol><li>Squared length: |3|² + |4i|² = 9 + 16 = 25, so the length is 5.</li><li>Divide by the length: |ψ⟩ = (3/5)|0⟩ + (4i/5)|1⟩.</li><li>Born rule: P(0) = (3/5)² = 0.36 and P(1) = |4i/5|² = 0.64.</li><li>Check: 0.36 + 0.64 = 1.</li></ol><p>The factor i did not affect either probability. It is a relative phase, and it will matter as soon as another gate is applied.</p></div>
+
+<h2>Misconceptions to raise</h2>
+<div class="problem"><ul><li>Adding amplitudes and expecting 1. It is the <b>squared magnitudes</b> that add to 1.</li><li>Squaring a complex amplitude instead of taking its magnitude first: |i|² = 1, but i² = −1.</li><li>Deciding that phase is irrelevant because it does not show up in one measurement.</li></ul></div>
+
+<h2>Discussion prompts</h2>
+<div class="discuss"><ul><li>If we can only observe probabilities, in what sense is the phase “real”?</li><li>What would go wrong if we described a qubit by P(0) and P(1) alone?</li></ul></div>
+
+<h2>Exit question</h2>
+<div class="teach"><p><b>Ask:</b> Two states both give 50/50 when measured. Are they necessarily the same state?</p><p><b>Looking for:</b> No. They can differ in relative phase, and can even be orthogonal, as (|0⟩+i|1⟩)/√2 and (|0⟩−i|1⟩)/√2 are.</p></div>
+
+<h2>Assign</h2>
+<p>One project from this session, following the predict → baseline → one extension → analyze routine. Project solutions are deliberately not published on this site.</p>
+<div class="project"><ul><li><a href="../projects/q01.html">Q01</a> Quantum Coin</li><li><a href="../projects/q02.html">Q02</a> Amplitude and Phase Explorer</li></ul></div>
+<p class="actions"><a class="button ghost" href="s1.html">Student page</a><a class="button" href="t2.html">Notes for Session 2 →</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>

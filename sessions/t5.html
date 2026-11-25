@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Teacher notes — Session 5 | OQCL</title><meta name="description" content="Instructor notes for session 5 of Quantum in 7 Sessions: timing, board example, misconceptions, and exit question."><link rel="stylesheet" href="../assets/style.css"></head><body><header><b>OQCL</b> &nbsp; <a href="../index.html">Home</a><a href="../start-here.html">Start Here</a><a href="../sessions.html">7 Sessions</a><a href="../contents.html">Textbook</a><a href="../projects.html">Projects</a><a href="../quest-lab.html">QUEST Lab</a><a href="../submit.html">Submit</a><a href="../use-cases.html">Use Cases</a><a href="../instructor.html">Instructor Guide</a><a href="../references.html">References</a></header><main><p class="crumbs"><a href="../instructor.html">Instructor Guide</a> › <a href="../sessions.html">7 Sessions</a> › Teacher notes</p>
+<div class="sessnav" aria-label="Teacher notes"><a class="" href="t1.html" title="Session 1">1</a><a class="" href="t2.html" title="Session 2">2</a><a class="" href="t3.html" title="Session 3">3</a><a class="" href="t4.html" title="Session 4">4</a><a class="on" href="t5.html" title="Session 5">5</a><a class="" href="t6.html" title="Session 6">6</a><a class="" href="t7.html" title="Session 7">7</a></div>
+<h1>Teacher notes — Session 5: Algorithms: search and phase estimation</h1>
+<p><span class="badge">For instructors</span><span class="badge">Flipped format</span></p>
+<div class="note"><b>The session in one sentence.</b> Grover marks the answer with a sign and then uses interference to turn that sign into a high probability.</div>
+<p>The <a href="s5.html">student page for Session 5</a> is written for self-study: students can read, work the example, run both experiments, and check their own answers without you. These notes are for the class time you do have.</p>
+
+<h2>Before class (students, on their own)</h2>
+<ul><li>Read <a href="../chapters/ch05.html">Chapter 5</a> and <a href="../chapters/ch06.html">Chapter 6</a>.</li><li>Do the worked example and the first experiment on the <a href="s5.html">student page</a>.</li><li>Bring one written prediction and one question.</li></ul>
+
+<h2>If you have 20 minutes</h2>
+<table><tr><th>Minutes</th><th>What to do</th></tr>
+<tr><td>0–3</td><td>Ask the exit question below cold, and take a show of hands. Do not give the answer yet.</td></tr>
+<tr><td>3–10</td><td>Board: the worked example from the student page, with students supplying each step.</td></tr>
+<tr><td>10–16</td><td>Live demo: run the second experiment. Collect predictions first, then run it.</td></tr>
+<tr><td>16–20</td><td>Return to the exit question, settle it, and assign the project.</td></tr></table>
+
+<h2>If you have a full 75-minute class</h2>
+<table><tr><th>Minutes</th><th>Activity</th></tr>
+<tr><td>0–10</td><td>Motivating question and show of hands.</td></tr>
+<tr><td>10–30</td><td>The three points below, with the mathematics on the board.</td></tr>
+<tr><td>30–45</td><td>Worked example at the board, students supplying steps.</td></tr>
+<tr><td>45–55</td><td>Misconceptions: put each “common mistake” to the class as a true/false statement.</td></tr>
+<tr><td>55–65</td><td>Live demo of both experiments, predictions first.</td></tr>
+<tr><td>65–75</td><td>Project briefing and exit question.</td></tr></table>
+
+<h2>Three points to make</h2>
+<ol><li>Oracle flips a sign: nothing visible yet.</li><li>Diffusion as “reflect about the average”, worked on the board for four states.</li><li>One round too many spoils it: run the second experiment live.</li></ol>
+
+<h2>Board example</h2>
+<div class="example"><p><b>Grover on four states, by hand.</b> Suppose the marked state is |11⟩.</p><ol><li>After the first H gates, all four amplitudes are ½.</li><li>Oracle: the marked amplitude becomes −½. The amplitudes are (½, ½, ½, −½).</li><li>Average: (½ + ½ + ½ − ½)/4 = ¼.</li><li>Diffusion replaces each amplitude a by 2 × average − a. Unmarked: 2 × ¼ − ½ = 0. Marked: 2 × ¼ − (−½) = 1.</li></ol><p>The final amplitudes are (0, 0, 0, 1), so the marked state is measured with certainty after one round.</p></div>
+
+<h2>Misconceptions to raise</h2>
+<div class="problem"><ul><li>Saying Grover “tries all answers at once”. It rotates amplitude toward the answer step by step.</li><li>Running more rounds to be safe. Too many rounds rotate the state past the answer and the success probability falls.</li><li>Forgetting that the oracle changes only a sign. On its own it changes no probability.</li></ul></div>
+
+<h2>Discussion prompts</h2>
+<div class="discuss"><ul><li>Where exactly does the speed-up come from, if the oracle is called one item at a time?</li><li>Why is a quadratic speed-up for unstructured search less dramatic than it sounds for real databases?</li></ul></div>
+
+<h2>Exit question</h2>
+<div class="teach"><p><b>Ask:</b> After the oracle, what is the probability of measuring the marked state among four?</p><p><b>Looking for:</b> Still ¼. The oracle changes only the sign of the amplitude.</p></div>
+
+<h2>Assign</h2>
+<p>One project from this session, following the predict → baseline → one extension → analyze routine. Project solutions are deliberately not published on this site.</p>
+<div class="project"><ul><li><a href="../projects/q11.html">Q11</a> Grover Search: Four States</li><li><a href="../projects/q13.html">Q13</a> Phase Estimation</li><li><a href="../projects/q12.html">Q12</a> Grover Under Noise</li></ul></div>
+<p class="actions"><a class="button ghost" href="t4.html">← Notes for Session 4</a><a class="button ghost" href="s5.html">Student page</a><a class="button" href="t6.html">Notes for Session 6 →</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>

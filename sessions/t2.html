@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Teacher notes — Session 2 | OQCL</title><meta name="description" content="Instructor notes for session 2 of Quantum in 7 Sessions: timing, board example, misconceptions, and exit question."><link rel="stylesheet" href="../assets/style.css"></head><body><header><b>OQCL</b> &nbsp; <a href="../index.html">Home</a><a href="../start-here.html">Start Here</a><a href="../sessions.html">7 Sessions</a><a href="../contents.html">Textbook</a><a href="../projects.html">Projects</a><a href="../quest-lab.html">QUEST Lab</a><a href="../submit.html">Submit</a><a href="../use-cases.html">Use Cases</a><a href="../instructor.html">Instructor Guide</a><a href="../references.html">References</a></header><main><p class="crumbs"><a href="../instructor.html">Instructor Guide</a> › <a href="../sessions.html">7 Sessions</a> › Teacher notes</p>
+<div class="sessnav" aria-label="Teacher notes"><a class="" href="t1.html" title="Session 1">1</a><a class="on" href="t2.html" title="Session 2">2</a><a class="" href="t3.html" title="Session 3">3</a><a class="" href="t4.html" title="Session 4">4</a><a class="" href="t5.html" title="Session 5">5</a><a class="" href="t6.html" title="Session 6">6</a><a class="" href="t7.html" title="Session 7">7</a></div>
+<h1>Teacher notes — Session 2: Measurement, gates, and interference</h1>
+<p><span class="badge">For instructors</span><span class="badge">Flipped format</span></p>
+<div class="note"><b>The session in one sentence.</b> Gates change amplitudes reversibly, measurement samples them, and amplitudes with opposite signs cancel.</div>
+<p>The <a href="s2.html">student page for Session 2</a> is written for self-study: students can read, work the example, run both experiments, and check their own answers without you. These notes are for the class time you do have.</p>
+
+<h2>Before class (students, on their own)</h2>
+<ul><li>Read <a href="../chapters/ch02.html">Chapter 2</a>.</li><li>Do the worked example and the first experiment on the <a href="s2.html">student page</a>.</li><li>Bring one written prediction and one question.</li></ul>
+
+<h2>If you have 20 minutes</h2>
+<table><tr><th>Minutes</th><th>What to do</th></tr>
+<tr><td>0–3</td><td>Ask the exit question below cold, and take a show of hands. Do not give the answer yet.</td></tr>
+<tr><td>3–10</td><td>Board: the worked example from the student page, with students supplying each step.</td></tr>
+<tr><td>10–16</td><td>Live demo: run the second experiment. Collect predictions first, then run it.</td></tr>
+<tr><td>16–20</td><td>Return to the exit question, settle it, and assign the project.</td></tr></table>
+
+<h2>If you have a full 75-minute class</h2>
+<table><tr><th>Minutes</th><th>Activity</th></tr>
+<tr><td>0–10</td><td>Motivating question and show of hands.</td></tr>
+<tr><td>10–30</td><td>The three points below, with the mathematics on the board.</td></tr>
+<tr><td>30–45</td><td>Worked example at the board, students supplying steps.</td></tr>
+<tr><td>45–55</td><td>Misconceptions: put each “common mistake” to the class as a true/false statement.</td></tr>
+<tr><td>55–65</td><td>Live demo of both experiments, predictions first.</td></tr>
+<tr><td>65–75</td><td>Project briefing and exit question.</td></tr></table>
+
+<h2>Three points to make</h2>
+<ol><li>Measurement is sampling: show 10 shots versus 1,000 shots.</li><li>HH = I on the board, tracking the signs.</li><li>Insert Z: no probability changes, yet the answer flips. That is interference.</li></ol>
+
+<h2>Board example</h2>
+<div class="example"><p><b>Follow the amplitudes through H, Z, H starting from |0⟩.</b></p><ol><li>H|0⟩ = (|0⟩ + |1⟩)/√2.</li><li>Z flips the sign of |1⟩: (|0⟩ − |1⟩)/√2. The probabilities are still 50/50.</li><li>Apply H to each part: H|0⟩ = (|0⟩ + |1⟩)/√2 and H|1⟩ = (|0⟩ − |1⟩)/√2.</li><li>Combine: ½[(|0⟩ + |1⟩) − (|0⟩ − |1⟩)] = ½[2|1⟩] = |1⟩.</li></ol><p>The two |0⟩ contributions cancel and the two |1⟩ contributions add. Without the Z, the signs are the other way round and the result is |0⟩.</p></div>
+
+<h2>Misconceptions to raise</h2>
+<div class="problem"><ul><li>Reading H as “makes the qubit random”. A random bit stays random after a second H; a superposition does not.</li><li>Thinking more shots change the state. Shots only improve your estimate of the same probabilities.</li><li>Assuming Z “does nothing” because it leaves the probabilities of |0⟩ and |1⟩ unchanged.</li></ul></div>
+
+<h2>Discussion prompts</h2>
+<div class="discuss"><ul><li>How is a superposition different from “we just do not know the value yet”?</li><li>Which experiment could convince a sceptic that the qubit after one H is not simply a random bit?</li></ul></div>
+
+<h2>Exit question</h2>
+<div class="teach"><p><b>Ask:</b> Why does H followed by H always give 0, when one H gives a random result?</p><p><b>Looking for:</b> The two paths to |1⟩ carry opposite signs and cancel, while the two paths to |0⟩ add.</p></div>
+
+<h2>Assign</h2>
+<p>One project from this session, following the predict → baseline → one extension → analyze routine. Project solutions are deliberately not published on this site.</p>
+<div class="project"><ul><li><a href="../projects/q03.html">Q03</a> X, H, and Interference</li><li><a href="../projects/q08.html">Q08</a> Shot-Count Convergence</li></ul></div>
+<p class="actions"><a class="button ghost" href="t1.html">← Notes for Session 1</a><a class="button ghost" href="s2.html">Student page</a><a class="button" href="t3.html">Notes for Session 3 →</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>

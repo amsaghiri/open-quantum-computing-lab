@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Teacher notes — Session 6 | OQCL</title><meta name="description" content="Instructor notes for session 6 of Quantum in 7 Sessions: timing, board example, misconceptions, and exit question."><link rel="stylesheet" href="../assets/style.css"></head><body><header><b>OQCL</b> &nbsp; <a href="../index.html">Home</a><a href="../start-here.html">Start Here</a><a href="../sessions.html">7 Sessions</a><a href="../contents.html">Textbook</a><a href="../projects.html">Projects</a><a href="../quest-lab.html">QUEST Lab</a><a href="../submit.html">Submit</a><a href="../use-cases.html">Use Cases</a><a href="../instructor.html">Instructor Guide</a><a href="../references.html">References</a></header><main><p class="crumbs"><a href="../instructor.html">Instructor Guide</a> › <a href="../sessions.html">7 Sessions</a> › Teacher notes</p>
+<div class="sessnav" aria-label="Teacher notes"><a class="" href="t1.html" title="Session 1">1</a><a class="" href="t2.html" title="Session 2">2</a><a class="" href="t3.html" title="Session 3">3</a><a class="" href="t4.html" title="Session 4">4</a><a class="" href="t5.html" title="Session 5">5</a><a class="on" href="t6.html" title="Session 6">6</a><a class="" href="t7.html" title="Session 7">7</a></div>
+<h1>Teacher notes — Session 6: Near-term methods: Hamiltonians and variational circuits</h1>
+<p><span class="badge">For instructors</span><span class="badge">Flipped format</span></p>
+<div class="note"><b>The session in one sentence.</b> Variational algorithms tune circuit angles with a classical loop to minimize a measured average.</div>
+<p>The <a href="s6.html">student page for Session 6</a> is written for self-study: students can read, work the example, run both experiments, and check their own answers without you. These notes are for the class time you do have.</p>
+
+<h2>Before class (students, on their own)</h2>
+<ul><li>Read <a href="../chapters/ch08.html">Chapter 8</a> and <a href="../chapters/ch09.html">Chapter 9</a> and <a href="../chapters/ch10.html">Chapter 10</a>.</li><li>Do the worked example and the first experiment on the <a href="s6.html">student page</a>.</li><li>Bring one written prediction and one question.</li></ul>
+
+<h2>If you have 20 minutes</h2>
+<table><tr><th>Minutes</th><th>What to do</th></tr>
+<tr><td>0–3</td><td>Ask the exit question below cold, and take a show of hands. Do not give the answer yet.</td></tr>
+<tr><td>3–10</td><td>Board: the worked example from the student page, with students supplying each step.</td></tr>
+<tr><td>10–16</td><td>Live demo: run the second experiment. Collect predictions first, then run it.</td></tr>
+<tr><td>16–20</td><td>Return to the exit question, settle it, and assign the project.</td></tr></table>
+
+<h2>If you have a full 75-minute class</h2>
+<table><tr><th>Minutes</th><th>Activity</th></tr>
+<tr><td>0–10</td><td>Motivating question and show of hands.</td></tr>
+<tr><td>10–30</td><td>The three points below, with the mathematics on the board.</td></tr>
+<tr><td>30–45</td><td>Worked example at the board, students supplying steps.</td></tr>
+<tr><td>45–55</td><td>Misconceptions: put each “common mistake” to the class as a true/false statement.</td></tr>
+<tr><td>55–65</td><td>Live demo of both experiments, predictions first.</td></tr>
+<tr><td>65–75</td><td>Project briefing and exit question.</td></tr></table>
+
+<h2>Three points to make</h2>
+<ol><li>Expectation value from counts: P(0) − P(1) on the board.</li><li>The hybrid loop: quantum estimates, classical decides.</li><li>Always state the classical baseline next to the quantum result.</li></ol>
+
+<h2>Board example</h2>
+<div class="example"><p><b>From counts to an expectation value.</b> The state Ry(θ)|0⟩ is cos(θ/2)|0⟩ + sin(θ/2)|1⟩.</p><ol><li>P(0) = cos²(θ/2) and P(1) = sin²(θ/2).</li><li>Z gives +1 for outcome 0 and −1 for outcome 1, so ⟨Z⟩ = P(0) − P(1) = cos²(θ/2) − sin²(θ/2) = cos θ.</li><li>Suppose 1,000 shots give 250 zeros and 750 ones. Then ⟨Z⟩ ≈ 0.25 − 0.75 = −0.5.</li><li>cos θ = −0.5 means θ = 2π/3, or 120°.</li></ol><p>This is how an energy is estimated on real hardware: from counts, not from the state itself.</p></div>
+
+<h2>Misconceptions to raise</h2>
+<div class="problem"><ul><li>Treating a variational result as exact. It is an estimate with sampling error, and the optimizer may stop in a local minimum.</li><li>Skipping the classical baseline. At teaching sizes the exact answer is always available, so compare against it.</li><li>Calling a small successful demonstration “quantum advantage”.</li></ul></div>
+
+<h2>Discussion prompts</h2>
+<div class="discuss"><ul><li>What would count as honest evidence that a variational method is useful?</li><li>Why might an optimizer fail on hardware even when the circuit is correct?</li></ul></div>
+
+<h2>Exit question</h2>
+<div class="teach"><p><b>Ask:</b> 1,000 shots give 250 zeros and 750 ones. What is ⟨Z⟩?</p><p><b>Looking for:</b> 0.25 − 0.75 = −0.5.</p></div>
+
+<h2>Assign</h2>
+<p>One project from this session, following the predict → baseline → one extension → analyze routine. Project solutions are deliberately not published on this site.</p>
+<div class="project"><ul><li><a href="../projects/q16.html">Q16</a> Ising Trotter Study</li><li><a href="../projects/q18.html">Q18</a> VQE Energy Estimation</li><li><a href="../projects/q19.html">Q19</a> QAOA Max-Cut</li><li><a href="../projects/q20.html">Q20</a> Variational Quantum Classifier</li></ul></div>
+<p class="actions"><a class="button ghost" href="t5.html">← Notes for Session 5</a><a class="button ghost" href="s6.html">Student page</a><a class="button" href="t7.html">Notes for Session 7 →</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>

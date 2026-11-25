@@ -1,17 +1,22 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Session 7 — Communication, benchmarking, and your own project | OQCL</title><meta name="description" content="Quantum in 7 Sessions, session 7: A key-distribution protocol, honest measurement, and what to do next."><link rel="stylesheet" href="../assets/style.css"></head><body><header><b>OQCL</b> &nbsp; <a href="../index.html">Home</a><a href="../start-here.html">Start Here</a><a href="../sessions.html">7 Sessions</a><a href="../contents.html">Textbook</a><a href="../projects.html">Projects</a><a href="../quest-lab.html">QUEST Lab</a><a href="../submit.html">Submit</a><a href="../use-cases.html">Use Cases</a><a href="../instructor.html">Instructor Guide</a><a href="../references.html">References</a></header><main><p class="crumbs"><a href="../sessions.html">Quantum in 7 Sessions</a> › Session 7</p>
 <div class="sessnav" aria-label="Sessions"><a class="" href="s1.html" title="Session 1">1</a><a class="" href="s2.html" title="Session 2">2</a><a class="" href="s3.html" title="Session 3">3</a><a class="" href="s4.html" title="Session 4">4</a><a class="" href="s5.html" title="Session 5">5</a><a class="" href="s6.html" title="Session 6">6</a><a class="on" href="s7.html" title="Session 7">7</a></div>
 <h1>Session 7 — Communication, benchmarking, and your own project</h1>
-<p><span class="badge">Session 7 of 7</span><span class="badge">Simulator only</span></p>
+<p><span class="badge">Session 7 of 7</span><span class="badge">Self-study</span><span class="badge">Simulator only</span></p>
 <div class="note"><b>By the end of this session you can</b> explain how BB84 uses two measurement bases to share a key, state what a benchmark can and cannot claim, and plan a reproducible project of your own.</div>
+<p class="toc"><b>On this page:</b> <a href="#read">Read</a> · <a href="#ideas">Key ideas</a> · <a href="#worked">Worked example</a> · <a href="#try">Try it</a> · <a href="#second">Second experiment</a> · <a href="#mistakes">Common mistakes</a> · <a href="#check">Check yourself</a> · <a href="#project">Project</a></p>
 
-<h2>1. Read</h2>
+<h2 id="read">1. Read</h2>
 <ul><li><a href="../chapters/ch11.html">Chapter 11 — Quantum Communication and BB84</a></li><li><a href="../chapters/ch12.html">Chapter 12 — Benchmarking and Reproducible Quantum Experiments</a></li></ul>
 <p>Read the chapters first. The summary below is a reminder, not a replacement.</p>
 
-<h2>2. Key ideas</h2>
+<h2 id="ideas">2. Key ideas</h2>
 <ul><li>In <b>BB84</b> Alice encodes each bit in one of two bases, chosen at random. Bob measures in a basis he chooses at random.</li><li>When their bases match, Bob’s result equals Alice’s bit. When they differ, his result is random, so those rounds are discarded (<b>sifting</b>).</li><li>An eavesdropper who measures in the wrong basis disturbs the state and causes errors in the sifted key, which Alice and Bob can detect by comparing a sample.</li><li>A <b>benchmark</b> describes one device, one circuit, and one day. Keep raw data, settings, and controls so that someone else can repeat it, and claim only what the evidence supports.</li></ul>
 
-<h2>3. Try it</h2>
+<h2 id="worked">3. Worked example</h2>
+<p>Work through this with pen and paper before touching the code.</p>
+<div class="example"><p><b>How much error does an eavesdropper cause?</b> Look only at rounds where Alice and Bob used the same basis.</p><ol><li>Eve guesses the basis. She is right half the time, and then causes no error.</li><li>The other half, she measures in the wrong basis and sends on a state in that wrong basis. Bob, measuring in Alice’s basis, now gets a random result and is wrong half the time.</li><li>Error rate in the sifted key: ½ × ½ = ¼, or 25%.</li><li>If Alice and Bob compare k bits, Eve escapes detection on each with probability ¾. For k = 20 that is (¾)²⁰ ≈ 0.003, about 0.3%.</li></ol></div>
+
+<h2 id="try">4. Try it</h2>
 <p>Simulate 32 rounds of BB84 with no eavesdropper and compare the sifted keys. Write down what you expect before you run the code.</p>
 <pre>import random
 from qiskit import QuantumCircuit
@@ -50,10 +55,61 @@ Bob  : 0110111011111011010
 keys identical: True</pre>
 <div class="example"><h3>What to notice</h3><p>About half of the rounds survive sifting, and the two keys are identical. This is a protocol demonstration, not a security proof. The interesting experiment is the next one: add an eavesdropper and measure how often the keys now disagree.</p></div>
 
-<h2>4. Check yourself</h2>
-<ol><li>Add Eve: before Bob’s gates, measure the qubit in a random basis and prepare it again from her result. What error rate do you predict in the sifted key?</li><li>Why must Alice and Bob sacrifice part of the key to check for errors?</li><li>Pick one result from an earlier session. What would another student need from you to reproduce it exactly?</li></ol>
+<h2 id="second">5. Second experiment</h2>
+<p>Add an eavesdropper who measures each qubit in a random basis and sends on what she saw. Predict first.</p>
+<pre>import random
+from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
 
-<h2>5. Do a project</h2>
+random.seed(7)
+sim = AerSimulator(seed_simulator=7)
+
+def measure(qc):
+    qc.measure(0, 0)
+    return int(list(sim.run(qc, shots=1).result().get_counts())[0])
+
+def prepare(bit, basis):
+    qc = QuantumCircuit(1, 1)
+    if bit:
+        qc.x(0)
+    if basis == &quot;X&quot;:
+        qc.h(0)
+    return qc
+
+kept = errors = 0
+for _ in range(400):
+    bit, basis_a, basis_e, basis_b = (random.randint(0, 1), random.choice(&quot;ZX&quot;),
+                                      random.choice(&quot;ZX&quot;), random.choice(&quot;ZX&quot;))
+    # Eve intercepts: measures in her own random basis ...
+    qc = prepare(bit, basis_a)
+    if basis_e == &quot;X&quot;:
+        qc.h(0)
+    eve_bit = measure(qc)
+    # ... and sends Bob a fresh qubit prepared from what she saw
+    qc = prepare(eve_bit, basis_e)
+    if basis_b == &quot;X&quot;:
+        qc.h(0)
+    bob_bit = measure(qc)
+
+    if basis_a == basis_b:
+        kept += 1
+        errors += (bob_bit != bit)
+
+print(&quot;rounds kept:&quot;, kept, &quot; errors:&quot;, errors, &quot; error rate:&quot;, round(errors / kept, 3))</pre>
+<p><b>Output:</b></p>
+<pre>rounds kept: 207  errors: 52  error rate: 0.251</pre>
+<div class="example"><h3>What it shows</h3><p>About a quarter of the sifted bits are now wrong, matching the hand calculation of 25%. Without Eve the error rate was zero. That jump is what Alice and Bob look for.</p></div>
+
+<h2 id="mistakes">6. Common mistakes and tips</h2>
+<div class="problem"><h3>Common mistakes</h3><ul><li>Thinking the basis announcement leaks the key. Bases are revealed only after the measurements, and the bit values never are.</li><li>Keeping the bits used for the error check. They were announced publicly and must be discarded.</li><li>Treating a simulated protocol as a security proof, or a single benchmark run as a general statement about a device.</li></ul></div>
+<div class="teach"><h3>Tips</h3><ul><li>Write a small table by hand first: Alice’s bit and basis, Bob’s basis and result, keep or discard.</li><li>With real hardware some errors appear even without an eavesdropper. The protocol must set a threshold.</li><li>For any benchmark, record device, date, shots, circuit, and seed. Without them the number means little.</li></ul></div>
+
+<h2 id="check">7. Check yourself</h2>
+<p>Answer each question on paper, then open the answer to compare.</p>
+<ol class="qa"><li>Add Eve: before Bob’s gates, measure the qubit in a random basis and prepare it again from her result. What error rate do you predict in the sifted key?<details><summary>Show answer</summary><p>About 25%, as the worked example and the second experiment show.</p></details></li><li>Why must Alice and Bob sacrifice part of the key to check for errors?<details><summary>Show answer</summary><p>Comparing bits is the only way to estimate the error rate, and bits that have been announced are no longer secret, so they are thrown away.</p></details></li><li>Pick one result from an earlier session. What would another student need from you to reproduce it exactly?<details><summary>Show answer</summary><p>The code, the package versions, the random seed, the number of shots, the backend, and the raw counts.</p></details></li></ol>
+
+<h2 id="project">8. Do a project</h2>
 <p>Pick one. Each follows the routine from <a href="../guide-first-project.html">Guide 1</a>: predict, run the baseline, change one variable, analyze.</p>
 <div class="project"><ul><li><a href="../projects/q21.html">Q21</a> BB84 and Eavesdropping</li><li><a href="../projects/q22.html">Q22</a> Reproducible Processor Benchmark</li><li><a href="../projects/q24.html">Q24</a> Reproduce, Extend, Publish</li></ul></div>
-<p class="actions"><a class="button ghost" href="s6.html">← Session 6</a><a class="button" href="../projects.html">Choose your project →</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>
+<p class="actions"><a class="button ghost" href="s6.html">← Session 6</a><a class="button" href="../projects.html">Choose your project →</a></p>
+<p class="crumbs" style="margin-top:28px">For instructors: <a href="t7.html">Teacher notes for Session 7</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>

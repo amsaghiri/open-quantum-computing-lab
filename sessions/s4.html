@@ -1,17 +1,22 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Session 4 — Real hardware: compilation and noise | OQCL</title><meta name="description" content="Quantum in 7 Sessions, session 4: Why the circuit you draw is not the circuit the machine runs."><link rel="stylesheet" href="../assets/style.css"></head><body><header><b>OQCL</b> &nbsp; <a href="../index.html">Home</a><a href="../start-here.html">Start Here</a><a href="../sessions.html">7 Sessions</a><a href="../contents.html">Textbook</a><a href="../projects.html">Projects</a><a href="../quest-lab.html">QUEST Lab</a><a href="../submit.html">Submit</a><a href="../use-cases.html">Use Cases</a><a href="../instructor.html">Instructor Guide</a><a href="../references.html">References</a></header><main><p class="crumbs"><a href="../sessions.html">Quantum in 7 Sessions</a> › Session 4</p>
 <div class="sessnav" aria-label="Sessions"><a class="" href="s1.html" title="Session 1">1</a><a class="" href="s2.html" title="Session 2">2</a><a class="" href="s3.html" title="Session 3">3</a><a class="on" href="s4.html" title="Session 4">4</a><a class="" href="s5.html" title="Session 5">5</a><a class="" href="s6.html" title="Session 6">6</a><a class="" href="s7.html" title="Session 7">7</a></div>
 <h1>Session 4 — Real hardware: compilation and noise</h1>
-<p><span class="badge">Session 4 of 7</span><span class="badge">Simulator only</span></p>
+<p><span class="badge">Session 4 of 7</span><span class="badge">Self-study</span><span class="badge">Simulator only</span></p>
 <div class="note"><b>By the end of this session you can</b> tell a logical circuit from the compiled circuit a device runs, explain why limited connectivity adds gates, and name the main kinds of error.</div>
+<p class="toc"><b>On this page:</b> <a href="#read">Read</a> · <a href="#ideas">Key ideas</a> · <a href="#worked">Worked example</a> · <a href="#try">Try it</a> · <a href="#second">Second experiment</a> · <a href="#mistakes">Common mistakes</a> · <a href="#check">Check yourself</a> · <a href="#project">Project</a></p>
 
-<h2>1. Read</h2>
+<h2 id="read">1. Read</h2>
 <ul><li><a href="../chapters/ch04.html">Chapter 4 — Circuits, Compilation, and Real Hardware</a></li><li><a href="../chapters/ch07.html">Chapter 7 — Noise, Error Detection, and Quantum Error Correction</a></li></ul>
 <p>Read the chapters first. The summary below is a reminder, not a replacement.</p>
 
-<h2>2. Key ideas</h2>
+<h2 id="ideas">2. Key ideas</h2>
 <ul><li>A real device supports only a small <b>native gate set</b>, and only certain pairs of qubits can interact directly (its <b>connectivity</b>).</li><li><b>Compilation</b> (transpilation) rewrites your circuit into native gates and inserts extra operations to move information between distant qubits.</li><li>Every extra gate, and especially every two-qubit gate, is another chance for error. Depth and two-qubit gate count are the first numbers to check before a hardware run.</li><li>Errors come in two basic kinds, bit flips and phase flips. Error correction spreads information over several qubits so errors can be detected without copying the unknown state, which is forbidden.</li></ul>
 
-<h2>3. Try it</h2>
+<h2 id="worked">3. Worked example</h2>
+<p>Work through this with pen and paper before touching the code.</p>
+<div class="example"><p><b>Estimate how much routing costs.</b> Suppose every two-qubit gate succeeds with probability 0.99, and ignore every other error.</p><ol><li>Logical circuit, 3 two-qubit gates: 0.99³ ≈ 0.970.</li><li>Compiled circuit, 6 two-qubit gates: 0.99⁶ ≈ 0.941.</li><li>Routing alone moved the estimate from about 97% to about 94%, before counting single-qubit gates, readout, or idle time.</li></ol><p>This is a rough model, not a prediction for any particular device. Its use is to compare two versions of the same circuit before you spend hardware time.</p></div>
+
+<h2 id="try">4. Try it</h2>
 <p>Take a 4-qubit GHZ circuit in which one qubit controls all the others, and compile it for a device whose qubits sit in a line. Write down what you expect before you run the code.</p>
 <pre>from qiskit import QuantumCircuit, transpile
 
@@ -34,10 +39,35 @@ print(&quot;hardware: depth&quot;, hw.depth(), &quot; two-qubit gates&quot;, hw.
 hardware: depth 9  two-qubit gates 6</pre>
 <div class="example"><h3>What to notice</h3><p>The logical circuit needs 3 two-qubit gates. On a line, qubit 0 is not next to qubits 2 and 3, so the compiler adds routing and the count roughly doubles, with a much larger depth. Nothing about the algorithm changed; only the hardware layout did. Exact numbers can differ between Qiskit versions.</p></div>
 
-<h2>4. Check yourself</h2>
-<ol><li>Rewrite the logical circuit as a chain (0→1, 1→2, 2→3). It prepares the same GHZ state. What happens to the compiled gate count?</li><li>Why can a quantum error-correcting code not simply copy the qubit three times?</li><li>Before spending hardware time, which three numbers would you record for a circuit?</li></ol>
+<h2 id="second">5. Second experiment</h2>
+<p>Build the same GHZ state as a chain, so that every CNOT acts on neighbouring qubits. Predict first.</p>
+<pre>from qiskit import QuantumCircuit, transpile
 
-<h2>5. Do a project</h2>
+# The same GHZ state, built as a chain: each CNOT acts on neighbours
+qc = QuantumCircuit(4)
+qc.h(0)
+qc.cx(0, 1)
+qc.cx(1, 2)
+qc.cx(2, 3)
+
+line = [[0, 1], [1, 0], [1, 2], [2, 1], [2, 3], [3, 2]]
+hw = transpile(qc, basis_gates=[&quot;rz&quot;, &quot;sx&quot;, &quot;x&quot;, &quot;cx&quot;], coupling_map=line,
+               optimization_level=1, seed_transpiler=7)
+print(&quot;hardware: depth&quot;, hw.depth(), &quot; two-qubit gates&quot;, hw.count_ops().get(&quot;cx&quot;, 0))</pre>
+<p><b>Output:</b></p>
+<pre>hardware: depth 6  two-qubit gates 3</pre>
+<div class="example"><h3>What it shows</h3><p>Now the compiled circuit needs only 3 two-qubit gates, the same as the logical one. The state prepared is identical; only the order of the CNOTs changed. Designing with the hardware layout in mind removed all the routing overhead.</p></div>
+
+<h2 id="mistakes">6. Common mistakes and tips</h2>
+<div class="problem"><h3>Common mistakes</h3><ul><li>Reporting the depth of the circuit you drew instead of the circuit that ran.</li><li>Assuming all qubits on a device are equally good and all pairs are connected.</li><li>Blaming every difference from the ideal result on “noise” without separating sampling error, compilation, and device error.</li></ul></div>
+<div class="teach"><h3>Tips</h3><ul><li>Always save both the logical and the compiled circuit, and record depth and two-qubit gate count for each.</li><li>Rewrite the circuit to respect the device layout when you can. It is often cheaper than letting the compiler route.</li><li>Fix the transpiler seed so that your compiled circuit is reproducible.</li></ul></div>
+
+<h2 id="check">7. Check yourself</h2>
+<p>Answer each question on paper, then open the answer to compare.</p>
+<ol class="qa"><li>Rewrite the logical circuit as a chain (0→1, 1→2, 2→3). It prepares the same GHZ state. What happens to the compiled gate count?<details><summary>Show answer</summary><p>It stays at 3, because every CNOT already acts on neighbours. See the second experiment.</p></details></li><li>Why can a quantum error-correcting code not simply copy the qubit three times?<details><summary>Show answer</summary><p>An unknown quantum state cannot be copied (the no-cloning principle). Error correction instead spreads the information over several qubits using entanglement.</p></details></li><li>Before spending hardware time, which three numbers would you record for a circuit?<details><summary>Show answer</summary><p>Circuit depth, number of two-qubit gates, and the number of jobs and shots (with the estimated cost or credits).</p></details></li></ol>
+
+<h2 id="project">8. Do a project</h2>
 <p>Pick one. Each follows the routine from <a href="../guide-first-project.html">Guide 1</a>: predict, run the baseline, change one variable, analyze.</p>
 <div class="project"><ul><li><a href="../projects/q09.html">Q09</a> Physical Qubit Mapping</li><li><a href="../projects/q10.html">Q10</a> Compilation Tradeoffs</li><li><a href="../projects/q23.html">Q23</a> Cost-Aware Hardware Plan</li><li><a href="../projects/q14.html">Q14</a> Syndrome Decoding</li></ul></div>
-<p class="actions"><a class="button ghost" href="s3.html">← Session 3</a><a class="button" href="s5.html">Session 5: Algorithms: search and phase estimation →</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>
+<p class="actions"><a class="button ghost" href="s3.html">← Session 3</a><a class="button" href="s5.html">Session 5: Algorithms: search and phase estimation →</a></p>
+<p class="crumbs" style="margin-top:28px">For instructors: <a href="t4.html">Teacher notes for Session 4</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>

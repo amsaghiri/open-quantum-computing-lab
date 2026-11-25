@@ -1,17 +1,22 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Session 3 — Entanglement | OQCL</title><meta name="description" content="Quantum in 7 Sessions, session 3: Two qubits whose results are linked in a way no single qubit explains."><link rel="stylesheet" href="../assets/style.css"></head><body><header><b>OQCL</b> &nbsp; <a href="../index.html">Home</a><a href="../start-here.html">Start Here</a><a href="../sessions.html">7 Sessions</a><a href="../contents.html">Textbook</a><a href="../projects.html">Projects</a><a href="../quest-lab.html">QUEST Lab</a><a href="../submit.html">Submit</a><a href="../use-cases.html">Use Cases</a><a href="../instructor.html">Instructor Guide</a><a href="../references.html">References</a></header><main><p class="crumbs"><a href="../sessions.html">Quantum in 7 Sessions</a> › Session 3</p>
 <div class="sessnav" aria-label="Sessions"><a class="" href="s1.html" title="Session 1">1</a><a class="" href="s2.html" title="Session 2">2</a><a class="on" href="s3.html" title="Session 3">3</a><a class="" href="s4.html" title="Session 4">4</a><a class="" href="s5.html" title="Session 5">5</a><a class="" href="s6.html" title="Session 6">6</a><a class="" href="s7.html" title="Session 7">7</a></div>
 <h1>Session 3 — Entanglement</h1>
-<p><span class="badge">Session 3 of 7</span><span class="badge">Simulator only</span></p>
+<p><span class="badge">Session 3 of 7</span><span class="badge">Self-study</span><span class="badge">Simulator only</span></p>
 <div class="note"><b>By the end of this session you can</b> write a two-qubit state in the computational basis, build a Bell state with H and CNOT, and say what the measurement results do and do not show.</div>
+<p class="toc"><b>On this page:</b> <a href="#read">Read</a> · <a href="#ideas">Key ideas</a> · <a href="#worked">Worked example</a> · <a href="#try">Try it</a> · <a href="#second">Second experiment</a> · <a href="#mistakes">Common mistakes</a> · <a href="#check">Check yourself</a> · <a href="#project">Project</a></p>
 
-<h2>1. Read</h2>
+<h2 id="read">1. Read</h2>
 <ul><li><a href="../chapters/ch03.html">Chapter 3 — Multiple Qubits, Tensor Products, and Entanglement</a></li></ul>
 <p>Read the chapter first. The summary below is a reminder, not a replacement.</p>
 
-<h2>2. Key ideas</h2>
+<h2 id="ideas">2. Key ideas</h2>
 <ul><li>Two qubits have four basis states: |00⟩, |01⟩, |10⟩, |11⟩. In general n qubits need 2ⁿ amplitudes.</li><li>A <b>CNOT</b> flips the target qubit only when the control qubit is 1.</li><li>H on the first qubit followed by CNOT produces the Bell state (|00⟩ + |11⟩)/√2. It cannot be written as “a state of qubit A” times “a state of qubit B”. That is <b>entanglement</b>.</li><li>Each qubit alone looks random, but the two results always agree. Agreement in one basis is not yet proof of entanglement; you need a second measurement basis to rule out an ordinary shared coin.</li></ul>
 
-<h2>3. Try it</h2>
+<h2 id="worked">3. Worked example</h2>
+<p>Work through this with pen and paper before touching the code.</p>
+<div class="example"><p><b>Build the Bell state step by step, writing states as |first qubit, second qubit⟩.</b></p><ol><li>Start: |00⟩.</li><li>H on the first qubit: (|00⟩ + |10⟩)/√2.</li><li>CNOT with the first qubit as control flips the second qubit only in the |10⟩ term: (|00⟩ + |11⟩)/√2.</li></ol><p><b>Why it is not two separate qubits.</b> A product state looks like (a|0⟩ + b|1⟩)(c|0⟩ + d|1⟩) = ac|00⟩ + ad|01⟩ + bc|10⟩ + bd|11⟩. To match the Bell state we need ad = 0 and bc = 0, but also ac ≠ 0 and bd ≠ 0. If ad = 0 then a = 0 or d = 0, which makes ac or bd zero. No choice works, so the state cannot be split.</p></div>
+
+<h2 id="try">4. Try it</h2>
 <p>Build the Bell state and look at which outcomes appear. Write down what you expect before you run the code.</p>
 <pre>from qiskit import QuantumCircuit
 from qiskit_aer import AerSimulator
@@ -27,10 +32,31 @@ print(counts)    # only &#x27;00&#x27; and &#x27;11&#x27; appear</pre>
 <pre>{&#x27;11&#x27;: 511, &#x27;00&#x27;: 489}</pre>
 <div class="example"><h3>What to notice</h3><p>Only 00 and 11 appear, each about half the time; 01 and 10 never do. Each qubit on its own is 50/50, but together they are perfectly correlated. Note that Qiskit prints the bit string with qubit 0 on the right.</p></div>
 
-<h2>4. Check yourself</h2>
-<ol><li>A classical pair of coins glued together also gives only 00 and 11. What extra measurement separates that from a Bell state?</li><li>Add a third qubit and one more CNOT to make a GHZ state. Which outcomes do you expect?</li><li>How many amplitudes describe 10 qubits? 30 qubits?</li></ol>
+<h2 id="second">5. Second experiment</h2>
+<p>Measure the same Bell state in a different basis by adding an H on each qubit just before measurement. Predict first.</p>
+<pre>from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
 
-<h2>5. Do a project</h2>
+qc = QuantumCircuit(2, 2)
+qc.h(0)
+qc.cx(0, 1)      # Bell state
+qc.h([0, 1])     # rotate both qubits: measure in the X basis instead of Z
+qc.measure([0, 1], [0, 1])
+print(AerSimulator(seed_simulator=7).run(qc, shots=1000).result().get_counts())</pre>
+<p><b>Output:</b></p>
+<pre>{&#x27;11&#x27;: 511, &#x27;00&#x27;: 489}</pre>
+<div class="example"><h3>What it shows</h3><p>The results are still only 00 and 11. A pair of classical coins that merely agree would give all four outcomes here. Perfect correlation in two different bases is the signature that separates a Bell state from a shared classical coin.</p></div>
+
+<h2 id="mistakes">6. Common mistakes and tips</h2>
+<div class="problem"><h3>Common mistakes</h3><ul><li>Saying “the qubits are both 0 or both 1, we just do not know which”. That describes a classical shared coin, not a Bell state.</li><li>Believing that measuring one qubit sends a signal to the other. The correlations cannot be used to communicate.</li><li>Reading Qiskit bit strings left to right. Qiskit prints qubit 0 on the <b>right</b>.</li></ul></div>
+<div class="teach"><h3>Tips</h3><ul><li>To test for entanglement, measure in a second basis. A classical mixture loses its correlation there; a Bell state keeps it.</li><li>Count amplitudes: n qubits need 2ⁿ of them. This is why classical simulation gets hard quickly.</li><li>Draw the circuit before writing code. Most errors are a control and target swapped.</li></ul></div>
+
+<h2 id="check">7. Check yourself</h2>
+<p>Answer each question on paper, then open the answer to compare.</p>
+<ol class="qa"><li>A classical pair of coins glued together also gives only 00 and 11. What extra measurement separates that from a Bell state?<details><summary>Show answer</summary><p>Measure both qubits in the X basis (an H on each before measuring). A Bell state still gives only 00 and 11. A classical mixture of 00 and 11 gives all four outcomes about equally.</p></details></li><li>Add a third qubit and one more CNOT to make a GHZ state. Which outcomes do you expect?<details><summary>Show answer</summary><p>Only 000 and 111, each about half the time.</p></details></li><li>How many amplitudes describe 10 qubits? 30 qubits?<details><summary>Show answer</summary><p>2¹⁰ = 1,024 and 2³⁰ = 1,073,741,824, about a billion.</p></details></li></ol>
+
+<h2 id="project">8. Do a project</h2>
 <p>Pick one. Each follows the routine from <a href="../guide-first-project.html">Guide 1</a>: predict, run the baseline, change one variable, analyze.</p>
 <div class="project"><ul><li><a href="../projects/q04.html">Q04</a> Bell Correlations</li><li><a href="../projects/q06.html">Q06</a> GHZ Scaling</li><li><a href="../projects/q05.html">Q05</a> Bell State Under Noise</li></ul></div>
-<p class="actions"><a class="button ghost" href="s2.html">← Session 2</a><a class="button" href="s4.html">Session 4: Real hardware: compilation and noise →</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>
+<p class="actions"><a class="button ghost" href="s2.html">← Session 2</a><a class="button" href="s4.html">Session 4: Real hardware: compilation and noise →</a></p>
+<p class="crumbs" style="margin-top:28px">For instructors: <a href="t3.html">Teacher notes for Session 3</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>

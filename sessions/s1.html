@@ -1,17 +1,22 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Session 1 — Qubits and amplitudes | OQCL</title><meta name="description" content="Quantum in 7 Sessions, session 1: What a qubit is, and why an amplitude is not a probability."><link rel="stylesheet" href="../assets/style.css"></head><body><header><b>OQCL</b> &nbsp; <a href="../index.html">Home</a><a href="../start-here.html">Start Here</a><a href="../sessions.html">7 Sessions</a><a href="../contents.html">Textbook</a><a href="../projects.html">Projects</a><a href="../quest-lab.html">QUEST Lab</a><a href="../submit.html">Submit</a><a href="../use-cases.html">Use Cases</a><a href="../instructor.html">Instructor Guide</a><a href="../references.html">References</a></header><main><p class="crumbs"><a href="../sessions.html">Quantum in 7 Sessions</a> › Session 1</p>
 <div class="sessnav" aria-label="Sessions"><a class="on" href="s1.html" title="Session 1">1</a><a class="" href="s2.html" title="Session 2">2</a><a class="" href="s3.html" title="Session 3">3</a><a class="" href="s4.html" title="Session 4">4</a><a class="" href="s5.html" title="Session 5">5</a><a class="" href="s6.html" title="Session 6">6</a><a class="" href="s7.html" title="Session 7">7</a></div>
 <h1>Session 1 — Qubits and amplitudes</h1>
-<p><span class="badge">Session 1 of 7</span><span class="badge">Simulator only</span></p>
+<p><span class="badge">Session 1 of 7</span><span class="badge">Self-study</span><span class="badge">Simulator only</span></p>
 <div class="note"><b>By the end of this session you can</b> describe a qubit with two amplitudes, turn amplitudes into measurement probabilities, and say why phase matters even when you cannot see it in one measurement.</div>
+<p class="toc"><b>On this page:</b> <a href="#read">Read</a> · <a href="#ideas">Key ideas</a> · <a href="#worked">Worked example</a> · <a href="#try">Try it</a> · <a href="#second">Second experiment</a> · <a href="#mistakes">Common mistakes</a> · <a href="#check">Check yourself</a> · <a href="#project">Project</a></p>
 
-<h2>1. Read</h2>
+<h2 id="read">1. Read</h2>
 <ul><li><a href="../chapters/ch01.html">Chapter 1 — Mathematical Language of Quantum Computing</a></li></ul>
 <p>Read the chapter first. The summary below is a reminder, not a replacement.</p>
 
-<h2>2. Key ideas</h2>
+<h2 id="ideas">2. Key ideas</h2>
 <ul><li>A qubit state is written |ψ⟩ = α|0⟩ + β|1⟩. The numbers α and β are complex <b>amplitudes</b>.</li><li>The Born rule turns amplitudes into probabilities: P(0) = |α|² and P(1) = |β|². A valid state has |α|² + |β|² = 1.</li><li>Multiplying the whole state by a <b>global phase</b> changes nothing you can observe. A <b>relative phase</b> between α and β is different: it can change what later gates do.</li><li>Two states can give identical probabilities when measured right away and still be different states.</li></ul>
 
-<h2>3. Try it</h2>
+<h2 id="worked">3. Worked example</h2>
+<p>Work through this with pen and paper before touching the code.</p>
+<div class="example"><p><b>Normalize 3|0⟩ + 4i|1⟩ and find the probabilities.</b></p><ol><li>Squared length: |3|² + |4i|² = 9 + 16 = 25, so the length is 5.</li><li>Divide by the length: |ψ⟩ = (3/5)|0⟩ + (4i/5)|1⟩.</li><li>Born rule: P(0) = (3/5)² = 0.36 and P(1) = |4i/5|² = 0.64.</li><li>Check: 0.36 + 0.64 = 1.</li></ol><p>The factor i did not affect either probability. It is a relative phase, and it will matter as soon as another gate is applied.</p></div>
+
+<h2 id="try">4. Try it</h2>
 <p>Build two states that have the same measurement probabilities but a different relative phase, and check how similar they really are. Write down what you expect before you run the code.</p>
 <pre>import numpy as np
 from qiskit.quantum_info import Statevector
@@ -33,10 +38,35 @@ probabilities: [0.5 0.5]
 overlap |&lt;phi|psi&gt;|^2: 0.0</pre>
 <div class="example"><h3>What to notice</h3><p>Both states give 50/50, so a single measurement in the computational basis cannot tell them apart. Yet their overlap is 0: they are orthogonal, as different as two quantum states can be. The difference lives entirely in the relative phase.</p></div>
 
-<h2>4. Check yourself</h2>
-<ol><li>Why can α = 1 and β = 1 not describe a qubit without rescaling?</li><li>What information do you lose if you replace amplitudes by probabilities too early?</li><li>Change the second state to [1, 1j] multiplied by −1. Predict the overlap with the first state before you run it.</li></ol>
+<h2 id="second">5. Second experiment</h2>
+<p>Check the worked example by computer, and confirm that a global phase changes nothing. Predict first.</p>
+<pre>import numpy as np
+from qiskit.quantum_info import Statevector
 
-<h2>5. Do a project</h2>
+v = np.array([3, 4j])                 # not normalized: 3|0&gt; + 4i|1&gt;
+psi = Statevector(v / np.linalg.norm(v))
+print(&quot;norm of v:&quot;, np.linalg.norm(v))
+print(&quot;probabilities:&quot;, psi.probabilities())
+
+# A global phase changes nothing observable
+same = Statevector(-1 * psi.data)
+print(&quot;overlap with -psi:&quot;, round(abs(same.inner(psi)) ** 2, 6))</pre>
+<p><b>Output:</b></p>
+<pre>norm of v: 5.0
+probabilities: [0.36 0.64]
+overlap with -psi: 1.0</pre>
+<div class="example"><h3>What it shows</h3><p>The computer agrees with the hand calculation: 0.36 and 0.64. Multiplying the whole state by −1 gives overlap 1, meaning it is physically the same state.</p></div>
+
+<h2 id="mistakes">6. Common mistakes and tips</h2>
+<div class="problem"><h3>Common mistakes</h3><ul><li>Adding amplitudes and expecting 1. It is the <b>squared magnitudes</b> that add to 1.</li><li>Squaring a complex amplitude instead of taking its magnitude first: |i|² = 1, but i² = −1.</li><li>Deciding that phase is irrelevant because it does not show up in one measurement.</li></ul></div>
+<div class="teach"><h3>Tips</h3><ul><li>Always check normalization first. It catches most arithmetic slips.</li><li>Keep amplitudes as long as possible and convert to probabilities only at the very end.</li><li>Draw the two amplitudes as arrows in the complex plane. A relative phase is the angle between them.</li></ul></div>
+
+<h2 id="check">7. Check yourself</h2>
+<p>Answer each question on paper, then open the answer to compare.</p>
+<ol class="qa"><li>Why can α = 1 and β = 1 not describe a qubit without rescaling?<details><summary>Show answer</summary><p>|1|² + |1|² = 2, not 1. Divide both amplitudes by √2.</p></details></li><li>What information do you lose if you replace amplitudes by probabilities too early?<details><summary>Show answer</summary><p>The relative phase. Without it you cannot predict what happens after another gate, because interference depends on it.</p></details></li><li>Change the second state to [1, 1j] multiplied by −1. Predict the overlap with the first state before you run it.<details><summary>Show answer</summary><p>The overlap is 1. Multiplying the whole state by −1 is a global phase, so it is the same physical state. The second experiment confirms it.</p></details></li></ol>
+
+<h2 id="project">8. Do a project</h2>
 <p>Pick one. Each follows the routine from <a href="../guide-first-project.html">Guide 1</a>: predict, run the baseline, change one variable, analyze.</p>
 <div class="project"><ul><li><a href="../projects/q01.html">Q01</a> Quantum Coin</li><li><a href="../projects/q02.html">Q02</a> Amplitude and Phase Explorer</li></ul></div>
-<p class="actions"><a class="button ghost" href="../sessions.html">← All sessions</a><a class="button" href="s2.html">Session 2: Measurement, gates, and interference →</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>
+<p class="actions"><a class="button ghost" href="../sessions.html">← All sessions</a><a class="button" href="s2.html">Session 2: Measurement, gates, and interference →</a></p>
+<p class="crumbs" style="margin-top:28px">For instructors: <a href="t1.html">Teacher notes for Session 1</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>

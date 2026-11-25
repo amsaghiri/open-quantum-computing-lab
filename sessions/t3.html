@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Teacher notes — Session 3 | OQCL</title><meta name="description" content="Instructor notes for session 3 of Quantum in 7 Sessions: timing, board example, misconceptions, and exit question."><link rel="stylesheet" href="../assets/style.css"></head><body><header><b>OQCL</b> &nbsp; <a href="../index.html">Home</a><a href="../start-here.html">Start Here</a><a href="../sessions.html">7 Sessions</a><a href="../contents.html">Textbook</a><a href="../projects.html">Projects</a><a href="../quest-lab.html">QUEST Lab</a><a href="../submit.html">Submit</a><a href="../use-cases.html">Use Cases</a><a href="../instructor.html">Instructor Guide</a><a href="../references.html">References</a></header><main><p class="crumbs"><a href="../instructor.html">Instructor Guide</a> › <a href="../sessions.html">7 Sessions</a> › Teacher notes</p>
+<div class="sessnav" aria-label="Teacher notes"><a class="" href="t1.html" title="Session 1">1</a><a class="" href="t2.html" title="Session 2">2</a><a class="on" href="t3.html" title="Session 3">3</a><a class="" href="t4.html" title="Session 4">4</a><a class="" href="t5.html" title="Session 5">5</a><a class="" href="t6.html" title="Session 6">6</a><a class="" href="t7.html" title="Session 7">7</a></div>
+<h1>Teacher notes — Session 3: Entanglement</h1>
+<p><span class="badge">For instructors</span><span class="badge">Flipped format</span></p>
+<div class="note"><b>The session in one sentence.</b> Entangled qubits have joint results that cannot be explained by giving each qubit its own state.</div>
+<p>The <a href="s3.html">student page for Session 3</a> is written for self-study: students can read, work the example, run both experiments, and check their own answers without you. These notes are for the class time you do have.</p>
+
+<h2>Before class (students, on their own)</h2>
+<ul><li>Read <a href="../chapters/ch03.html">Chapter 3</a>.</li><li>Do the worked example and the first experiment on the <a href="s3.html">student page</a>.</li><li>Bring one written prediction and one question.</li></ul>
+
+<h2>If you have 20 minutes</h2>
+<table><tr><th>Minutes</th><th>What to do</th></tr>
+<tr><td>0–3</td><td>Ask the exit question below cold, and take a show of hands. Do not give the answer yet.</td></tr>
+<tr><td>3–10</td><td>Board: the worked example from the student page, with students supplying each step.</td></tr>
+<tr><td>10–16</td><td>Live demo: run the second experiment. Collect predictions first, then run it.</td></tr>
+<tr><td>16–20</td><td>Return to the exit question, settle it, and assign the project.</td></tr></table>
+
+<h2>If you have a full 75-minute class</h2>
+<table><tr><th>Minutes</th><th>Activity</th></tr>
+<tr><td>0–10</td><td>Motivating question and show of hands.</td></tr>
+<tr><td>10–30</td><td>The three points below, with the mathematics on the board.</td></tr>
+<tr><td>30–45</td><td>Worked example at the board, students supplying steps.</td></tr>
+<tr><td>45–55</td><td>Misconceptions: put each “common mistake” to the class as a true/false statement.</td></tr>
+<tr><td>55–65</td><td>Live demo of both experiments, predictions first.</td></tr>
+<tr><td>65–75</td><td>Project briefing and exit question.</td></tr></table>
+
+<h2>Three points to make</h2>
+<ol><li>Four basis states for two qubits; 2ⁿ in general.</li><li>Build the Bell state on the board in three lines.</li><li>Correlation alone is not entanglement: show the X-basis measurement.</li></ol>
+
+<h2>Board example</h2>
+<div class="example"><p><b>Build the Bell state step by step, writing states as |first qubit, second qubit⟩.</b></p><ol><li>Start: |00⟩.</li><li>H on the first qubit: (|00⟩ + |10⟩)/√2.</li><li>CNOT with the first qubit as control flips the second qubit only in the |10⟩ term: (|00⟩ + |11⟩)/√2.</li></ol><p><b>Why it is not two separate qubits.</b> A product state looks like (a|0⟩ + b|1⟩)(c|0⟩ + d|1⟩) = ac|00⟩ + ad|01⟩ + bc|10⟩ + bd|11⟩. To match the Bell state we need ad = 0 and bc = 0, but also ac ≠ 0 and bd ≠ 0. If ad = 0 then a = 0 or d = 0, which makes ac or bd zero. No choice works, so the state cannot be split.</p></div>
+
+<h2>Misconceptions to raise</h2>
+<div class="problem"><ul><li>Saying “the qubits are both 0 or both 1, we just do not know which”. That describes a classical shared coin, not a Bell state.</li><li>Believing that measuring one qubit sends a signal to the other. The correlations cannot be used to communicate.</li><li>Reading Qiskit bit strings left to right. Qiskit prints qubit 0 on the <b>right</b>.</li></ul></div>
+
+<h2>Discussion prompts</h2>
+<div class="discuss"><ul><li>Why can entanglement not be used to send a message faster than light?</li><li>What does it mean physically that the Bell state cannot be factored?</li></ul></div>
+
+<h2>Exit question</h2>
+<div class="teach"><p><b>Ask:</b> A Bell pair and a pair of glued classical coins both give only 00 and 11. How do you tell them apart?</p><p><b>Looking for:</b> Measure both in a second basis (H before measurement). The Bell state stays perfectly correlated; the classical pair does not.</p></div>
+
+<h2>Assign</h2>
+<p>One project from this session, following the predict → baseline → one extension → analyze routine. Project solutions are deliberately not published on this site.</p>
+<div class="project"><ul><li><a href="../projects/q04.html">Q04</a> Bell Correlations</li><li><a href="../projects/q06.html">Q06</a> GHZ Scaling</li><li><a href="../projects/q05.html">Q05</a> Bell State Under Noise</li></ul></div>
+<p class="actions"><a class="button ghost" href="t2.html">← Notes for Session 2</a><a class="button ghost" href="s3.html">Student page</a><a class="button" href="t4.html">Notes for Session 4 →</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>

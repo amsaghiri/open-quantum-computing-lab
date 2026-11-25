@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Teacher notes — Session 7 | OQCL</title><meta name="description" content="Instructor notes for session 7 of Quantum in 7 Sessions: timing, board example, misconceptions, and exit question."><link rel="stylesheet" href="../assets/style.css"></head><body><header><b>OQCL</b> &nbsp; <a href="../index.html">Home</a><a href="../start-here.html">Start Here</a><a href="../sessions.html">7 Sessions</a><a href="../contents.html">Textbook</a><a href="../projects.html">Projects</a><a href="../quest-lab.html">QUEST Lab</a><a href="../submit.html">Submit</a><a href="../use-cases.html">Use Cases</a><a href="../instructor.html">Instructor Guide</a><a href="../references.html">References</a></header><main><p class="crumbs"><a href="../instructor.html">Instructor Guide</a> › <a href="../sessions.html">7 Sessions</a> › Teacher notes</p>
+<div class="sessnav" aria-label="Teacher notes"><a class="" href="t1.html" title="Session 1">1</a><a class="" href="t2.html" title="Session 2">2</a><a class="" href="t3.html" title="Session 3">3</a><a class="" href="t4.html" title="Session 4">4</a><a class="" href="t5.html" title="Session 5">5</a><a class="" href="t6.html" title="Session 6">6</a><a class="on" href="t7.html" title="Session 7">7</a></div>
+<h1>Teacher notes — Session 7: Communication, benchmarking, and your own project</h1>
+<p><span class="badge">For instructors</span><span class="badge">Flipped format</span></p>
+<div class="note"><b>The session in one sentence.</b> BB84 detects eavesdropping because measuring in the wrong basis disturbs the state, and honest results need recorded evidence.</div>
+<p>The <a href="s7.html">student page for Session 7</a> is written for self-study: students can read, work the example, run both experiments, and check their own answers without you. These notes are for the class time you do have.</p>
+
+<h2>Before class (students, on their own)</h2>
+<ul><li>Read <a href="../chapters/ch11.html">Chapter 11</a> and <a href="../chapters/ch12.html">Chapter 12</a>.</li><li>Do the worked example and the first experiment on the <a href="s7.html">student page</a>.</li><li>Bring one written prediction and one question.</li></ul>
+
+<h2>If you have 20 minutes</h2>
+<table><tr><th>Minutes</th><th>What to do</th></tr>
+<tr><td>0–3</td><td>Ask the exit question below cold, and take a show of hands. Do not give the answer yet.</td></tr>
+<tr><td>3–10</td><td>Board: the worked example from the student page, with students supplying each step.</td></tr>
+<tr><td>10–16</td><td>Live demo: run the second experiment. Collect predictions first, then run it.</td></tr>
+<tr><td>16–20</td><td>Return to the exit question, settle it, and assign the project.</td></tr></table>
+
+<h2>If you have a full 75-minute class</h2>
+<table><tr><th>Minutes</th><th>Activity</th></tr>
+<tr><td>0–10</td><td>Motivating question and show of hands.</td></tr>
+<tr><td>10–30</td><td>The three points below, with the mathematics on the board.</td></tr>
+<tr><td>30–45</td><td>Worked example at the board, students supplying steps.</td></tr>
+<tr><td>45–55</td><td>Misconceptions: put each “common mistake” to the class as a true/false statement.</td></tr>
+<tr><td>55–65</td><td>Live demo of both experiments, predictions first.</td></tr>
+<tr><td>65–75</td><td>Project briefing and exit question.</td></tr></table>
+
+<h2>Three points to make</h2>
+<ol><li>Two bases, random choices, keep only matching rounds.</li><li>Why Eve causes 25% errors: two halves multiplied, on the board.</li><li>What a benchmark number does and does not tell you.</li></ol>
+
+<h2>Board example</h2>
+<div class="example"><p><b>How much error does an eavesdropper cause?</b> Look only at rounds where Alice and Bob used the same basis.</p><ol><li>Eve guesses the basis. She is right half the time, and then causes no error.</li><li>The other half, she measures in the wrong basis and sends on a state in that wrong basis. Bob, measuring in Alice’s basis, now gets a random result and is wrong half the time.</li><li>Error rate in the sifted key: ½ × ½ = ¼, or 25%.</li><li>If Alice and Bob compare k bits, Eve escapes detection on each with probability ¾. For k = 20 that is (¾)²⁰ ≈ 0.003, about 0.3%.</li></ol></div>
+
+<h2>Misconceptions to raise</h2>
+<div class="problem"><ul><li>Thinking the basis announcement leaks the key. Bases are revealed only after the measurements, and the bit values never are.</li><li>Keeping the bits used for the error check. They were announced publicly and must be discarded.</li><li>Treating a simulated protocol as a security proof, or a single benchmark run as a general statement about a device.</li></ul></div>
+
+<h2>Discussion prompts</h2>
+<div class="discuss"><ul><li>What does BB84 assume about the devices that a real attacker might violate?</li><li>What would you need to see before trusting a published hardware benchmark?</li></ul></div>
+
+<h2>Exit question</h2>
+<div class="teach"><p><b>Ask:</b> In BB84 with an intercept-and-resend eavesdropper, what error rate appears in the sifted key?</p><p><b>Looking for:</b> About 25%: she picks the wrong basis half the time, and then Bob is wrong half the time.</p></div>
+
+<h2>Assign</h2>
+<p>One project from this session, following the predict → baseline → one extension → analyze routine. Project solutions are deliberately not published on this site.</p>
+<div class="project"><ul><li><a href="../projects/q21.html">Q21</a> BB84 and Eavesdropping</li><li><a href="../projects/q22.html">Q22</a> Reproducible Processor Benchmark</li><li><a href="../projects/q24.html">Q24</a> Reproduce, Extend, Publish</li></ul></div>
+<p class="actions"><a class="button ghost" href="t6.html">← Notes for Session 6</a><a class="button ghost" href="s7.html">Student page</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>

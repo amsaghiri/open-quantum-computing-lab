@@ -1,17 +1,22 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Session 2 — Measurement, gates, and interference | OQCL</title><meta name="description" content="Quantum in 7 Sessions, session 2: How gates change a state, and how amplitudes can cancel."><link rel="stylesheet" href="../assets/style.css"></head><body><header><b>OQCL</b> &nbsp; <a href="../index.html">Home</a><a href="../start-here.html">Start Here</a><a href="../sessions.html">7 Sessions</a><a href="../contents.html">Textbook</a><a href="../projects.html">Projects</a><a href="../quest-lab.html">QUEST Lab</a><a href="../submit.html">Submit</a><a href="../use-cases.html">Use Cases</a><a href="../instructor.html">Instructor Guide</a><a href="../references.html">References</a></header><main><p class="crumbs"><a href="../sessions.html">Quantum in 7 Sessions</a> › Session 2</p>
 <div class="sessnav" aria-label="Sessions"><a class="" href="s1.html" title="Session 1">1</a><a class="on" href="s2.html" title="Session 2">2</a><a class="" href="s3.html" title="Session 3">3</a><a class="" href="s4.html" title="Session 4">4</a><a class="" href="s5.html" title="Session 5">5</a><a class="" href="s6.html" title="Session 6">6</a><a class="" href="s7.html" title="Session 7">7</a></div>
 <h1>Session 2 — Measurement, gates, and interference</h1>
-<p><span class="badge">Session 2 of 7</span><span class="badge">Simulator only</span></p>
+<p><span class="badge">Session 2 of 7</span><span class="badge">Self-study</span><span class="badge">Simulator only</span></p>
 <div class="note"><b>By the end of this session you can</b> predict the result of the X, Z, and H gates on a single qubit, explain measurement as sampling, and show interference with a three-gate circuit.</div>
+<p class="toc"><b>On this page:</b> <a href="#read">Read</a> · <a href="#ideas">Key ideas</a> · <a href="#worked">Worked example</a> · <a href="#try">Try it</a> · <a href="#second">Second experiment</a> · <a href="#mistakes">Common mistakes</a> · <a href="#check">Check yourself</a> · <a href="#project">Project</a></p>
 
-<h2>1. Read</h2>
+<h2 id="read">1. Read</h2>
 <ul><li><a href="../chapters/ch02.html">Chapter 2 — Qubits, Measurement, and Single-Qubit Gates</a></li></ul>
 <p>Read the chapter first. The summary below is a reminder, not a replacement.</p>
 
-<h2>2. Key ideas</h2>
+<h2 id="ideas">2. Key ideas</h2>
 <ul><li>A gate is a reversible (unitary) operation on the state. <b>X</b> swaps |0⟩ and |1⟩. <b>Z</b> flips the sign of the |1⟩ amplitude. <b>H</b> turns |0⟩ into an equal superposition.</li><li>Measurement is <b>sampling</b>: each shot gives 0 or 1, and you estimate probabilities from many shots. More shots give a better estimate, not a different state.</li><li>Applying H twice returns the qubit to |0⟩. The two paths to |1⟩ have opposite signs and cancel. That cancellation is <b>interference</b>.</li><li>A Z gate between the two H gates changes only a phase, yet it flips the final answer from 0 to 1. Phase is invisible until interference makes it visible.</li></ul>
 
-<h2>3. Try it</h2>
+<h2 id="worked">3. Worked example</h2>
+<p>Work through this with pen and paper before touching the code.</p>
+<div class="example"><p><b>Follow the amplitudes through H, Z, H starting from |0⟩.</b></p><ol><li>H|0⟩ = (|0⟩ + |1⟩)/√2.</li><li>Z flips the sign of |1⟩: (|0⟩ − |1⟩)/√2. The probabilities are still 50/50.</li><li>Apply H to each part: H|0⟩ = (|0⟩ + |1⟩)/√2 and H|1⟩ = (|0⟩ − |1⟩)/√2.</li><li>Combine: ½[(|0⟩ + |1⟩) − (|0⟩ − |1⟩)] = ½[2|1⟩] = |1⟩.</li></ol><p>The two |0⟩ contributions cancel and the two |1⟩ contributions add. Without the Z, the signs are the other way round and the result is |0⟩.</p></div>
+
+<h2 id="try">4. Try it</h2>
 <p>Run three small circuits and compare them. Predict each result before you look. Write down what you expect before you run the code.</p>
 <pre>from qiskit import QuantumCircuit
 from qiskit_aer import AerSimulator
@@ -33,10 +38,31 @@ H, H      {&#x27;0&#x27;: 1000}
 H, Z, H   {&#x27;1&#x27;: 1000}</pre>
 <div class="example"><h3>What to notice</h3><p>One H gives a random-looking result. Two H gates give 0 every time, so the randomness was not noise: it was a superposition that could be undone. Inserting Z, which changes no probability on its own, turns the answer into 1 every time.</p></div>
 
-<h2>4. Check yourself</h2>
-<ol><li>If H made the qubit “randomly 0 or 1”, what would H followed by H give? Why is that not what happens?</li><li>What does X do between the two H gates instead of Z? Predict, then test.</li><li>How many shots do you need before P(0) for a single H is reliably within 0.05 of 0.5?</li></ol>
+<h2 id="second">5. Second experiment</h2>
+<p>Replace the Z in the middle with X and predict the result first. Predict first.</p>
+<pre>from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
 
-<h2>5. Do a project</h2>
+qc = QuantumCircuit(1, 1)
+qc.h(0)
+qc.x(0)          # X instead of Z in the middle
+qc.h(0)
+qc.measure(0, 0)
+print(AerSimulator(seed_simulator=7).run(qc, shots=1000).result().get_counts())</pre>
+<p><b>Output:</b></p>
+<pre>{&#x27;0&#x27;: 1000}</pre>
+<div class="example"><h3>What it shows</h3><p>The answer is 0 every time. X swaps the two amplitudes of H|0⟩, but they are equal, so nothing changes and the second H returns the qubit to |0⟩. Equivalently, HXH = Z, and Z leaves |0⟩ alone.</p></div>
+
+<h2 id="mistakes">6. Common mistakes and tips</h2>
+<div class="problem"><h3>Common mistakes</h3><ul><li>Reading H as “makes the qubit random”. A random bit stays random after a second H; a superposition does not.</li><li>Thinking more shots change the state. Shots only improve your estimate of the same probabilities.</li><li>Assuming Z “does nothing” because it leaves the probabilities of |0⟩ and |1⟩ unchanged.</li></ul></div>
+<div class="teach"><h3>Tips</h3><ul><li>When unsure, track amplitudes line by line as in the worked example. Three lines of algebra beat guessing.</li><li>Sampling error shrinks like 1/√shots. To halve the error you need four times the shots.</li><li>Useful identities: HH = I, HZH = X, HXH = Z.</li></ul></div>
+
+<h2 id="check">7. Check yourself</h2>
+<p>Answer each question on paper, then open the answer to compare.</p>
+<ol class="qa"><li>If H made the qubit “randomly 0 or 1”, what would H followed by H give? Why is that not what happens?<details><summary>Show answer</summary><p>A random bit would still be random after the second H, giving about 50/50. The experiment gives 0 every time, so the state after one H was a definite superposition, not a random bit.</p></details></li><li>What does X do between the two H gates instead of Z? Predict, then test.<details><summary>Show answer</summary><p>Always 0. See the second experiment: X swaps two equal amplitudes, which changes nothing.</p></details></li><li>How many shots do you need before P(0) for a single H is reliably within 0.05 of 0.5?<details><summary>Show answer</summary><p>The standard error of P(0) is √(0.25/N). Two standard errors within 0.05 needs N of about 400. With 100 shots you will often miss by more than 0.05.</p></details></li></ol>
+
+<h2 id="project">8. Do a project</h2>
 <p>Pick one. Each follows the routine from <a href="../guide-first-project.html">Guide 1</a>: predict, run the baseline, change one variable, analyze.</p>
 <div class="project"><ul><li><a href="../projects/q03.html">Q03</a> X, H, and Interference</li><li><a href="../projects/q08.html">Q08</a> Shot-Count Convergence</li></ul></div>
-<p class="actions"><a class="button ghost" href="s1.html">← Session 1</a><a class="button" href="s3.html">Session 3: Entanglement →</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>
+<p class="actions"><a class="button ghost" href="s1.html">← Session 1</a><a class="button" href="s3.html">Session 3: Entanglement →</a></p>
+<p class="crumbs" style="margin-top:28px">For instructors: <a href="t2.html">Teacher notes for Session 2</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>
