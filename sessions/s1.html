@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Session 1 — Qubits and amplitudes | OQCL</title><meta name="description" content="Quantum in 7 Sessions, session 1: What a qubit is, and why an amplitude is not a probability."><link rel="stylesheet" href="../assets/style.css"></head><body><header><b>OQCL</b> &nbsp; <a href="../index.html">Home</a><a href="../start-here.html">Start Here</a><a href="../sessions.html">7 Sessions</a><a href="../contents.html">Textbook</a><a href="../projects.html">Projects</a><a href="../quest-lab.html">QUEST Lab</a><a href="../submit.html">Submit</a><a href="../use-cases.html">Use Cases</a><a href="../instructor.html">Instructor Guide</a><a href="../references.html">References</a></header><main><p class="crumbs"><a href="../sessions.html">Quantum in 7 Sessions</a> › Session 1</p>
+<div class="sessnav" aria-label="Sessions"><a class="on" href="s1.html" title="Session 1">1</a><a class="" href="s2.html" title="Session 2">2</a><a class="" href="s3.html" title="Session 3">3</a><a class="" href="s4.html" title="Session 4">4</a><a class="" href="s5.html" title="Session 5">5</a><a class="" href="s6.html" title="Session 6">6</a><a class="" href="s7.html" title="Session 7">7</a></div>
+<h1>Session 1 — Qubits and amplitudes</h1>
+<p><span class="badge">Session 1 of 7</span><span class="badge">Simulator only</span></p>
+<div class="note"><b>By the end of this session you can</b> describe a qubit with two amplitudes, turn amplitudes into measurement probabilities, and say why phase matters even when you cannot see it in one measurement.</div>
+
+<h2>1. Read</h2>
+<ul><li><a href="../chapters/ch01.html">Chapter 1 — Mathematical Language of Quantum Computing</a></li></ul>
+<p>Read the chapter first. The summary below is a reminder, not a replacement.</p>
+
+<h2>2. Key ideas</h2>
+<ul><li>A qubit state is written |ψ⟩ = α|0⟩ + β|1⟩. The numbers α and β are complex <b>amplitudes</b>.</li><li>The Born rule turns amplitudes into probabilities: P(0) = |α|² and P(1) = |β|². A valid state has |α|² + |β|² = 1.</li><li>Multiplying the whole state by a <b>global phase</b> changes nothing you can observe. A <b>relative phase</b> between α and β is different: it can change what later gates do.</li><li>Two states can give identical probabilities when measured right away and still be different states.</li></ul>
+
+<h2>3. Try it</h2>
+<p>Build two states that have the same measurement probabilities but a different relative phase, and check how similar they really are. Write down what you expect before you run the code.</p>
+<pre>import numpy as np
+from qiskit.quantum_info import Statevector
+
+# A qubit state is two complex amplitudes: alpha for |0&gt; and beta for |1&gt;
+psi = Statevector([1, 1j]) / np.sqrt(2)
+
+print(&quot;valid state:&quot;, psi.is_valid())          # is it normalized?
+print(&quot;probabilities:&quot;, psi.probabilities())   # [P(0), P(1)]
+
+# The same probabilities, a different relative phase
+phi = Statevector([1, -1j]) / np.sqrt(2)
+print(&quot;probabilities:&quot;, phi.probabilities())
+print(&quot;overlap |&lt;phi|psi&gt;|^2:&quot;, abs(phi.inner(psi)) ** 2)</pre>
+<p><b>Output</b> (counts will vary slightly from run to run):</p>
+<pre>valid state: True
+probabilities: [0.5 0.5]
+probabilities: [0.5 0.5]
+overlap |&lt;phi|psi&gt;|^2: 0.0</pre>
+<div class="example"><h3>What to notice</h3><p>Both states give 50/50, so a single measurement in the computational basis cannot tell them apart. Yet their overlap is 0: they are orthogonal, as different as two quantum states can be. The difference lives entirely in the relative phase.</p></div>
+
+<h2>4. Check yourself</h2>
+<ol><li>Why can α = 1 and β = 1 not describe a qubit without rescaling?</li><li>What information do you lose if you replace amplitudes by probabilities too early?</li><li>Change the second state to [1, 1j] multiplied by −1. Predict the overlap with the first state before you run it.</li></ol>
+
+<h2>5. Do a project</h2>
+<p>Pick one. Each follows the routine from <a href="../guide-first-project.html">Guide 1</a>: predict, run the baseline, change one variable, analyze.</p>
+<div class="project"><ul><li><a href="../projects/q01.html">Q01</a> Quantum Coin</li><li><a href="../projects/q02.html">Q02</a> Amplitude and Phase Explorer</li></ul></div>
+<p class="actions"><a class="button ghost" href="../sessions.html">← All sessions</a><a class="button" href="s2.html">Session 2: Measurement, gates, and interference →</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>

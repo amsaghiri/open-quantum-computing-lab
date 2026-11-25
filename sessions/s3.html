@@ -1,0 +1,36 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Session 3 — Entanglement | OQCL</title><meta name="description" content="Quantum in 7 Sessions, session 3: Two qubits whose results are linked in a way no single qubit explains."><link rel="stylesheet" href="../assets/style.css"></head><body><header><b>OQCL</b> &nbsp; <a href="../index.html">Home</a><a href="../start-here.html">Start Here</a><a href="../sessions.html">7 Sessions</a><a href="../contents.html">Textbook</a><a href="../projects.html">Projects</a><a href="../quest-lab.html">QUEST Lab</a><a href="../submit.html">Submit</a><a href="../use-cases.html">Use Cases</a><a href="../instructor.html">Instructor Guide</a><a href="../references.html">References</a></header><main><p class="crumbs"><a href="../sessions.html">Quantum in 7 Sessions</a> › Session 3</p>
+<div class="sessnav" aria-label="Sessions"><a class="" href="s1.html" title="Session 1">1</a><a class="" href="s2.html" title="Session 2">2</a><a class="on" href="s3.html" title="Session 3">3</a><a class="" href="s4.html" title="Session 4">4</a><a class="" href="s5.html" title="Session 5">5</a><a class="" href="s6.html" title="Session 6">6</a><a class="" href="s7.html" title="Session 7">7</a></div>
+<h1>Session 3 — Entanglement</h1>
+<p><span class="badge">Session 3 of 7</span><span class="badge">Simulator only</span></p>
+<div class="note"><b>By the end of this session you can</b> write a two-qubit state in the computational basis, build a Bell state with H and CNOT, and say what the measurement results do and do not show.</div>
+
+<h2>1. Read</h2>
+<ul><li><a href="../chapters/ch03.html">Chapter 3 — Multiple Qubits, Tensor Products, and Entanglement</a></li></ul>
+<p>Read the chapter first. The summary below is a reminder, not a replacement.</p>
+
+<h2>2. Key ideas</h2>
+<ul><li>Two qubits have four basis states: |00⟩, |01⟩, |10⟩, |11⟩. In general n qubits need 2ⁿ amplitudes.</li><li>A <b>CNOT</b> flips the target qubit only when the control qubit is 1.</li><li>H on the first qubit followed by CNOT produces the Bell state (|00⟩ + |11⟩)/√2. It cannot be written as “a state of qubit A” times “a state of qubit B”. That is <b>entanglement</b>.</li><li>Each qubit alone looks random, but the two results always agree. Agreement in one basis is not yet proof of entanglement; you need a second measurement basis to rule out an ordinary shared coin.</li></ul>
+
+<h2>3. Try it</h2>
+<p>Build the Bell state and look at which outcomes appear. Write down what you expect before you run the code.</p>
+<pre>from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
+
+qc = QuantumCircuit(2, 2)
+qc.h(0)          # put qubit 0 in superposition
+qc.cx(0, 1)      # entangle qubit 1 with qubit 0
+qc.measure([0, 1], [0, 1])
+
+counts = AerSimulator(seed_simulator=7).run(qc, shots=1000).result().get_counts()
+print(counts)    # only &#x27;00&#x27; and &#x27;11&#x27; appear</pre>
+<p><b>Output</b> (counts will vary slightly from run to run):</p>
+<pre>{&#x27;11&#x27;: 511, &#x27;00&#x27;: 489}</pre>
+<div class="example"><h3>What to notice</h3><p>Only 00 and 11 appear, each about half the time; 01 and 10 never do. Each qubit on its own is 50/50, but together they are perfectly correlated. Note that Qiskit prints the bit string with qubit 0 on the right.</p></div>
+
+<h2>4. Check yourself</h2>
+<ol><li>A classical pair of coins glued together also gives only 00 and 11. What extra measurement separates that from a Bell state?</li><li>Add a third qubit and one more CNOT to make a GHZ state. Which outcomes do you expect?</li><li>How many amplitudes describe 10 qubits? 30 qubits?</li></ol>
+
+<h2>5. Do a project</h2>
+<p>Pick one. Each follows the routine from <a href="../guide-first-project.html">Guide 1</a>: predict, run the baseline, change one variable, analyze.</p>
+<div class="project"><ul><li><a href="../projects/q04.html">Q04</a> Bell Correlations</li><li><a href="../projects/q06.html">Q06</a> GHZ Scaling</li><li><a href="../projects/q05.html">Q05</a> Bell State Under Noise</li></ul></div>
+<p class="actions"><a class="button ghost" href="s2.html">← Session 2</a><a class="button" href="s4.html">Session 4: Real hardware: compilation and noise →</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>

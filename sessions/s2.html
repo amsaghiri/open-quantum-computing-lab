@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Session 2 — Measurement, gates, and interference | OQCL</title><meta name="description" content="Quantum in 7 Sessions, session 2: How gates change a state, and how amplitudes can cancel."><link rel="stylesheet" href="../assets/style.css"></head><body><header><b>OQCL</b> &nbsp; <a href="../index.html">Home</a><a href="../start-here.html">Start Here</a><a href="../sessions.html">7 Sessions</a><a href="../contents.html">Textbook</a><a href="../projects.html">Projects</a><a href="../quest-lab.html">QUEST Lab</a><a href="../submit.html">Submit</a><a href="../use-cases.html">Use Cases</a><a href="../instructor.html">Instructor Guide</a><a href="../references.html">References</a></header><main><p class="crumbs"><a href="../sessions.html">Quantum in 7 Sessions</a> › Session 2</p>
+<div class="sessnav" aria-label="Sessions"><a class="" href="s1.html" title="Session 1">1</a><a class="on" href="s2.html" title="Session 2">2</a><a class="" href="s3.html" title="Session 3">3</a><a class="" href="s4.html" title="Session 4">4</a><a class="" href="s5.html" title="Session 5">5</a><a class="" href="s6.html" title="Session 6">6</a><a class="" href="s7.html" title="Session 7">7</a></div>
+<h1>Session 2 — Measurement, gates, and interference</h1>
+<p><span class="badge">Session 2 of 7</span><span class="badge">Simulator only</span></p>
+<div class="note"><b>By the end of this session you can</b> predict the result of the X, Z, and H gates on a single qubit, explain measurement as sampling, and show interference with a three-gate circuit.</div>
+
+<h2>1. Read</h2>
+<ul><li><a href="../chapters/ch02.html">Chapter 2 — Qubits, Measurement, and Single-Qubit Gates</a></li></ul>
+<p>Read the chapter first. The summary below is a reminder, not a replacement.</p>
+
+<h2>2. Key ideas</h2>
+<ul><li>A gate is a reversible (unitary) operation on the state. <b>X</b> swaps |0⟩ and |1⟩. <b>Z</b> flips the sign of the |1⟩ amplitude. <b>H</b> turns |0⟩ into an equal superposition.</li><li>Measurement is <b>sampling</b>: each shot gives 0 or 1, and you estimate probabilities from many shots. More shots give a better estimate, not a different state.</li><li>Applying H twice returns the qubit to |0⟩. The two paths to |1⟩ have opposite signs and cancel. That cancellation is <b>interference</b>.</li><li>A Z gate between the two H gates changes only a phase, yet it flips the final answer from 0 to 1. Phase is invisible until interference makes it visible.</li></ul>
+
+<h2>3. Try it</h2>
+<p>Run three small circuits and compare them. Predict each result before you look. Write down what you expect before you run the code.</p>
+<pre>from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
+
+sim = AerSimulator(seed_simulator=7)
+
+def run(build, label):
+    qc = QuantumCircuit(1, 1)
+    build(qc)
+    qc.measure(0, 0)
+    print(label, sim.run(qc, shots=1000).result().get_counts())
+
+run(lambda qc: qc.h(0), &quot;H        &quot;)                          # about half 0, half 1
+run(lambda qc: (qc.h(0), qc.h(0)), &quot;H, H     &quot;)              # always 0
+run(lambda qc: (qc.h(0), qc.z(0), qc.h(0)), &quot;H, Z, H  &quot;)     # always 1</pre>
+<p><b>Output</b> (counts will vary slightly from run to run):</p>
+<pre>H         {&#x27;1&#x27;: 486, &#x27;0&#x27;: 514}
+H, H      {&#x27;0&#x27;: 1000}
+H, Z, H   {&#x27;1&#x27;: 1000}</pre>
+<div class="example"><h3>What to notice</h3><p>One H gives a random-looking result. Two H gates give 0 every time, so the randomness was not noise: it was a superposition that could be undone. Inserting Z, which changes no probability on its own, turns the answer into 1 every time.</p></div>
+
+<h2>4. Check yourself</h2>
+<ol><li>If H made the qubit “randomly 0 or 1”, what would H followed by H give? Why is that not what happens?</li><li>What does X do between the two H gates instead of Z? Predict, then test.</li><li>How many shots do you need before P(0) for a single H is reliably within 0.05 of 0.5?</li></ol>
+
+<h2>5. Do a project</h2>
+<p>Pick one. Each follows the routine from <a href="../guide-first-project.html">Guide 1</a>: predict, run the baseline, change one variable, analyze.</p>
+<div class="project"><ul><li><a href="../projects/q03.html">Q03</a> X, H, and Interference</li><li><a href="../projects/q08.html">Q08</a> Shot-Count Convergence</li></ul></div>
+<p class="actions"><a class="button ghost" href="s1.html">← Session 1</a><a class="button" href="s3.html">Session 3: Entanglement →</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>

@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Session 5 — Algorithms: search and phase estimation | OQCL</title><meta name="description" content="Quantum in 7 Sessions, session 5: Using interference on purpose to make the right answer likely."><link rel="stylesheet" href="../assets/style.css"></head><body><header><b>OQCL</b> &nbsp; <a href="../index.html">Home</a><a href="../start-here.html">Start Here</a><a href="../sessions.html">7 Sessions</a><a href="../contents.html">Textbook</a><a href="../projects.html">Projects</a><a href="../quest-lab.html">QUEST Lab</a><a href="../submit.html">Submit</a><a href="../use-cases.html">Use Cases</a><a href="../instructor.html">Instructor Guide</a><a href="../references.html">References</a></header><main><p class="crumbs"><a href="../sessions.html">Quantum in 7 Sessions</a> › Session 5</p>
+<div class="sessnav" aria-label="Sessions"><a class="" href="s1.html" title="Session 1">1</a><a class="" href="s2.html" title="Session 2">2</a><a class="" href="s3.html" title="Session 3">3</a><a class="" href="s4.html" title="Session 4">4</a><a class="on" href="s5.html" title="Session 5">5</a><a class="" href="s6.html" title="Session 6">6</a><a class="" href="s7.html" title="Session 7">7</a></div>
+<h1>Session 5 — Algorithms: search and phase estimation</h1>
+<p><span class="badge">Session 5 of 7</span><span class="badge">Simulator only</span></p>
+<div class="note"><b>By the end of this session you can</b> explain Grover’s search as a sign flip followed by a reflection, run it on four states, and describe what phase estimation measures.</div>
+
+<h2>1. Read</h2>
+<ul><li><a href="../chapters/ch05.html">Chapter 5 — Interference and Quantum Search</a></li><li><a href="../chapters/ch06.html">Chapter 6 — Phase, Eigenvalues, and Phase Estimation</a></li></ul>
+<p>Read the chapters first. The summary below is a reminder, not a replacement.</p>
+
+<h2>2. Key ideas</h2>
+<ul><li>An <b>oracle</b> marks the answer by flipping the sign of its amplitude. Probabilities do not change yet.</li><li>The <b>diffusion</b> step reflects all amplitudes about their average. The marked amplitude grows and the others shrink.</li><li>For four states, one round is enough to make the marked state certain. In general Grover needs about √N rounds, a quadratic saving in oracle calls for unstructured search. It does not “read all answers at once”.</li><li><b>Phase estimation</b> uses the same idea in a different way: a controlled operation writes the phase of an eigenvalue onto helper qubits, where it can be read out.</li></ul>
+
+<h2>3. Try it</h2>
+<p>Search four states for the marked one, |11⟩, with a single Grover round. Write down what you expect before you run the code.</p>
+<pre>from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
+
+qc = QuantumCircuit(2, 2)
+qc.h([0, 1])        # equal superposition of 00, 01, 10, 11
+
+qc.cz(0, 1)         # oracle: flip the sign of the marked state |11&gt;
+
+qc.h([0, 1])        # diffusion: reflect about the average amplitude
+qc.x([0, 1])
+qc.cz(0, 1)
+qc.x([0, 1])
+qc.h([0, 1])
+
+qc.measure([0, 1], [0, 1])
+print(AerSimulator(seed_simulator=7).run(qc, shots=1000).result().get_counts())</pre>
+<p><b>Output</b> (counts will vary slightly from run to run):</p>
+<pre>{&#x27;11&#x27;: 1000}</pre>
+<div class="example"><h3>What to notice</h3><p>All 1,000 shots return 11. After the first H gates every state had probability ¼. The oracle changed only a sign, and the diffusion step converted that hidden sign into a certain answer. This is the interference from Session 2, used deliberately.</p></div>
+
+<h2>4. Check yourself</h2>
+<ol><li>Change the oracle so that it marks |01⟩ instead (hint: an X gate on one qubit before and after the CZ). Predict the result.</li><li>What happens if you apply the Grover round twice on four states? Predict, then test.</li><li>Why does the oracle alone not help, even though it “knows” the answer?</li></ol>
+
+<h2>5. Do a project</h2>
+<p>Pick one. Each follows the routine from <a href="../guide-first-project.html">Guide 1</a>: predict, run the baseline, change one variable, analyze.</p>
+<div class="project"><ul><li><a href="../projects/q11.html">Q11</a> Grover Search: Four States</li><li><a href="../projects/q13.html">Q13</a> Phase Estimation</li><li><a href="../projects/q12.html">Q12</a> Grover Under Noise</li></ul></div>
+<p class="actions"><a class="button ghost" href="s4.html">← Session 4</a><a class="button" href="s6.html">Session 6: Near-term methods: Hamiltonians and variational circuits →</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>

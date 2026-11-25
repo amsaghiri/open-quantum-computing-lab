@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Session 6 — Near-term methods: Hamiltonians and variational circuits | OQCL</title><meta name="description" content="Quantum in 7 Sessions, session 6: A quantum circuit with adjustable angles, tuned by a classical loop."><link rel="stylesheet" href="../assets/style.css"></head><body><header><b>OQCL</b> &nbsp; <a href="../index.html">Home</a><a href="../start-here.html">Start Here</a><a href="../sessions.html">7 Sessions</a><a href="../contents.html">Textbook</a><a href="../projects.html">Projects</a><a href="../quest-lab.html">QUEST Lab</a><a href="../submit.html">Submit</a><a href="../use-cases.html">Use Cases</a><a href="../instructor.html">Instructor Guide</a><a href="../references.html">References</a></header><main><p class="crumbs"><a href="../sessions.html">Quantum in 7 Sessions</a> › Session 6</p>
+<div class="sessnav" aria-label="Sessions"><a class="" href="s1.html" title="Session 1">1</a><a class="" href="s2.html" title="Session 2">2</a><a class="" href="s3.html" title="Session 3">3</a><a class="" href="s4.html" title="Session 4">4</a><a class="" href="s5.html" title="Session 5">5</a><a class="on" href="s6.html" title="Session 6">6</a><a class="" href="s7.html" title="Session 7">7</a></div>
+<h1>Session 6 — Near-term methods: Hamiltonians and variational circuits</h1>
+<p><span class="badge">Session 6 of 7</span><span class="badge">Simulator only</span></p>
+<div class="note"><b>By the end of this session you can</b> say what an expectation value is, describe the hybrid loop used by VQE and QAOA, and explain why a classical baseline is always required.</div>
+
+<h2>1. Read</h2>
+<ul><li><a href="../chapters/ch08.html">Chapter 8 — Hamiltonians, Dynamics, and Trotterization</a></li><li><a href="../chapters/ch09.html">Chapter 9 — Variational and Hybrid Quantum Algorithms</a></li><li><a href="../chapters/ch10.html">Chapter 10 — Quantum Machine Learning</a></li></ul>
+<p>Read the chapters first. The summary below is a reminder, not a replacement.</p>
+
+<h2>2. Key ideas</h2>
+<ul><li>A <b>Hamiltonian</b> describes the energy of a system. Measuring an operator many times gives its <b>expectation value</b>, the average result.</li><li>A <b>parameterized circuit</b> has gates with adjustable angles. Different angles prepare different trial states.</li><li>The <b>hybrid loop</b>: the quantum circuit prepares a trial state and estimates the energy; a classical optimizer chooses the next angles. VQE, QAOA, and variational classifiers all follow this pattern.</li><li>At teaching sizes a classical computer solves these problems easily. A small demonstration is never evidence of quantum advantage, so always compare with an exact or classical answer.</li></ul>
+
+<h2>3. Try it</h2>
+<p>A one-qubit version of the variational idea: find the angle θ that minimizes the expectation value of Z for the state Ry(θ)|0⟩. Write down what you expect before you run the code.</p>
+<pre>import numpy as np
+from qiskit import QuantumCircuit
+from qiskit.quantum_info import Statevector, SparsePauliOp
+
+Z = SparsePauliOp(&quot;Z&quot;)
+
+def energy(theta):
+    qc = QuantumCircuit(1)
+    qc.ry(theta, 0)                                   # the trial state
+    return Statevector(qc).expectation_value(Z).real  # &lt;Z&gt; = cos(theta)
+
+# The &quot;classical optimizer&quot;: try many angles and keep the best one
+thetas = np.linspace(0, 2 * np.pi, 41)
+values = [energy(t) for t in thetas]
+best = int(np.argmin(values))
+
+print(&quot;lowest &lt;Z&gt; found:&quot;, round(values[best], 3))
+print(&quot;at theta =&quot;, round(thetas[best], 3), &quot;(pi =&quot;, round(np.pi, 3), &quot;)&quot;)</pre>
+<p><b>Output</b> (counts will vary slightly from run to run):</p>
+<pre>lowest &lt;Z&gt; found: -1.0
+at theta = 3.142 (pi = 3.142 )</pre>
+<div class="example"><h3>What to notice</h3><p>The lowest value is −1 at θ = π, where Ry(θ) has rotated |0⟩ into |1⟩. For this state ⟨Z⟩ = cos θ, so you can check the answer by hand. That hand calculation is the classical baseline; in a real problem you would compare against exact diagonalization or brute force.</p></div>
+
+<h2>4. Check yourself</h2>
+<ol><li>Replace Z by X in the code. At which angle is ⟨X⟩ lowest? Work it out first.</li><li>On a real device you would estimate ⟨Z⟩ from counts as P(0) − P(1). How does the number of shots affect the optimizer?</li><li>Why is “my VQE found the right energy for a tiny molecule” not a claim of advantage?</li></ol>
+
+<h2>5. Do a project</h2>
+<p>Pick one. Each follows the routine from <a href="../guide-first-project.html">Guide 1</a>: predict, run the baseline, change one variable, analyze.</p>
+<div class="project"><ul><li><a href="../projects/q16.html">Q16</a> Ising Trotter Study</li><li><a href="../projects/q18.html">Q18</a> VQE Energy Estimation</li><li><a href="../projects/q19.html">Q19</a> QAOA Max-Cut</li><li><a href="../projects/q20.html">Q20</a> Variational Quantum Classifier</li></ul></div>
+<p class="actions"><a class="button ghost" href="s5.html">← Session 5</a><a class="button" href="s7.html">Session 7: Communication, benchmarking, and your own project →</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>

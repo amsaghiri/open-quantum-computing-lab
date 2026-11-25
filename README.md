@@ -13,6 +13,9 @@ Learn → predict → reproduce baseline → measure → controlled extension �
 ## Student guides
 New students should begin at `start-here.html`. It links four short manuals: a step-by-step first project (Q01), README/REPORT templates (also in `templates/`), GitHub submission, and the hardware path.
 
+## Quantum in 7 Sessions
+`sessions.html` and `sessions/s1.html`–`s7.html` give a guided study order through the 12 chapters, each with one tested Qiskit example, self-check questions, and linked projects.
+
 ## Website
 Publish this repository with GitHub Pages. `index.html` is the site entry point.
 
