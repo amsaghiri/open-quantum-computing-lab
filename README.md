@@ -11,7 +11,7 @@ OQCL is a textbook-first laboratory: scientific concepts and worked examples com
 Learn → predict → reproduce baseline → measure → controlled extension → analyze → submit reproducibly.
 
 ## Student guides
-New students should begin at `start-here.html`. It links four short manuals: a step-by-step first project (Q01), README/REPORT templates (also in `templates/`), GitHub submission, and the hardware path.
+New students should begin at `start-here.html`. It links the printable Student Manual (`assets/oqcl-student-manual.pdf`) and four short manuals: a step-by-step first project (Q01), README/REPORT templates (also in `templates/`), GitHub submission, and the hardware path.
 
 ## Quantum in 7 Sessions
 `sessions.html` and `sessions/s1.html`–`s7.html` give a guided study order through the 12 chapters, each with one tested Qiskit example, self-check questions, and linked projects.
