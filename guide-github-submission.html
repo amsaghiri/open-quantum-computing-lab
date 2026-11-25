@@ -1,0 +1,57 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Guide 3 — Submitting with GitHub | OQCL</title><meta name="description" content="How to submit an OQCL project with a GitHub fork and Pull Request, written for students who have never used GitHub."><link rel="stylesheet" href="assets/style.css"></head><body><header><b>OQCL</b> &nbsp; <a href="index.html">Home</a><a href="start-here.html">Start Here</a><a href="contents.html">Textbook</a><a href="projects.html">Projects</a><a href="quest-lab.html">QUEST Lab</a><a href="submit.html">Submit</a><a href="use-cases.html">Use Cases</a><a href="instructor.html">Instructor Guide</a><a href="references.html">References</a></header><main><p class="crumbs"><a href="start-here.html">Start Here</a> › Student guides</p>
+<h1>Guide 3 — Submitting with GitHub</h1>
+<p><span class="badge">About 20 minutes</span><span class="badge">No GitHub experience needed</span></p>
+<p class="lead">You submit a project by adding one folder to your own copy of the OQCL repository and asking for it to be reviewed. That request is called a Pull Request. This guide shows the whole path in the browser, with a command-line option at the end.</p>
+<div class="note"><b>Before you start.</b> For graded or QPU work, apply by email first and wait for approval: <a href="mailto:saghiria@wpunj.edu?subject=OQCL%20Project%20Application">saghiria@wpunj.edu</a> with the project ID, project title, your name, and a short plan.</div>
+
+<h2>Step 1 — Create a GitHub account</h2>
+<p>If you do not have one, sign up at <a href="https://github.com/">github.com</a>. Your username becomes part of your project folder name.</p>
+
+<h2>Step 2 — Fork the repository</h2>
+<p>Open the <a href="https://github.com/amsaghiri/open-quantum-computing-lab">OQCL repository</a> and click <b>Fork</b> in the top-right corner, then <b>Create fork</b>. You now have your own copy at <code>github.com/YOUR-USERNAME/open-quantum-computing-lab</code>. You can change it freely without affecting anyone else.</p>
+
+<h2>Step 3 — Prepare your project folder on your computer</h2>
+<p>Name it with the project ID and your GitHub username, and use this layout:</p>
+<pre>q01-yourgithubname/
+  README.md
+  notebook.ipynb
+  src/                 # optional
+  results/raw/
+  results/figures/
+  environment/requirements.txt
+  REPORT.md</pre>
+<table><tr><th>File</th><th>Purpose</th></tr>
+<tr><td>README.md</td><td>Question, hypothesis, reproduction instructions, runtime/backend.</td></tr>
+<tr><td>notebook.ipynb</td><td>Executable experiment and analysis.</td></tr>
+<tr><td>results/raw/</td><td>Machine-readable counts/data; never credentials.</td></tr>
+<tr><td>results/figures/</td><td>Labeled plots/diagrams generated from results.</td></tr>
+<tr><td>REPORT.md</td><td>Baseline, extension, interpretation, uncertainty, limitations, conclusion.</td></tr></table>
+
+<h2>Step 4 — Upload the folder to your fork</h2>
+<ol><li>In <b>your fork</b>, open the <code>projects</code> folder.</li><li>Click <b>Add file → Upload files</b>.</li><li>Drag your whole <code>q01-yourgithubname</code> folder into the page. Dragging the folder keeps its structure.</li><li>Under <b>Commit changes</b>, write a short message such as <code>Q01 submission: yourgithubname</code>.</li><li>Choose <b>Create a new branch for this commit</b> and click <b>Propose changes</b>.</li></ol>
+
+<h2>Step 5 — Open the Pull Request</h2>
+<ol><li>GitHub shows a page titled <b>Open a pull request</b>. Check that the base repository is <code>amsaghiri/open-quantum-computing-lab</code>.</li><li>The description box is pre-filled with the OQCL submission form. Fill in every line: project ID, baseline, extension, result with the metric, and the execution metadata (backend, shots, working time, and cost or credits if any).</li><li>Tick each box in the checklist only if it is true.</li><li>Click <b>Create pull request</b>.</li></ol>
+
+<h2>Step 6 — Respond to review</h2>
+<p>Your instructor may ask for changes. Edit or upload files on the same branch in your fork and the Pull Request updates automatically. You do not need to open a new one.</p>
+
+<div class="problem"><h3>Never upload these</h3><p>API keys, tokens, passwords, private keys, billing or account identifiers, or private student information. Check your notebook outputs too: a token printed in a cell is still a leaked token.</p></div>
+
+<h2>Command-line option</h2>
+<p>If you already use Git, this does the same as Steps 4 and 5. Replace <code>YOUR-USERNAME</code> and the folder name.</p>
+<pre>git clone https://github.com/YOUR-USERNAME/open-quantum-computing-lab.git
+cd open-quantum-computing-lab
+git checkout -b q01-yourgithubname
+
+# copy your finished folder into projects/
+cp -r /path/to/q01-yourgithubname projects/
+
+git add projects/q01-yourgithubname
+git commit -m "Q01 submission: yourgithubname"
+git push -u origin q01-yourgithubname</pre>
+<p>Then open your fork on GitHub and click <b>Compare &amp; pull request</b>.</p>
+
+<h2>Course submission and public publication are separate</h2>
+<p>Submitting for the course does not publish your work in the public book. Student work enters the curated public book only through an explicit opt-in and attribution process.</p>
+<p class="actions"><a class="button" href="quest-lab.html">Next: Guide 4 — Using real hardware</a><a class="button ghost" href="start-here.html">Back to Start Here</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>

@@ -1,0 +1,82 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Guide 2 — Writing README.md and REPORT.md | OQCL</title><meta name="description" content="Copy-ready templates for the README and REPORT files required in every OQCL project."><link rel="stylesheet" href="assets/style.css"></head><body><header><b>OQCL</b> &nbsp; <a href="index.html">Home</a><a href="start-here.html">Start Here</a><a href="contents.html">Textbook</a><a href="projects.html">Projects</a><a href="quest-lab.html">QUEST Lab</a><a href="submit.html">Submit</a><a href="use-cases.html">Use Cases</a><a href="instructor.html">Instructor Guide</a><a href="references.html">References</a></header><main><p class="crumbs"><a href="start-here.html">Start Here</a> › Student guides</p>
+<h1>Guide 2 — Writing README.md and REPORT.md</h1>
+<p><span class="badge">About 15 minutes to read</span><span class="badge">Templates included</span></p>
+<p class="lead">Every project needs two short text files. The README lets someone else rerun your work. The REPORT explains what the result means. Copy the templates below and fill them in.</p>
+<div class="note"><b>Where to get the files.</b> Both templates are in the <a href="https://github.com/amsaghiri/open-quantum-computing-lab/tree/main/templates">templates folder of the repository</a>, ready to copy into your project folder.</div>
+
+<h2>README.md — so others can reproduce your work</h2>
+<p>Write the Question, Hypothesis, and Metric sections before you run anything. Fill in the rest when you finish.</p>
+<pre># Qxx — Project title
+
+**Student / team:**
+**GitHub username(s):**
+**Date:**
+
+## Question
+What scientific question does this experiment answer? (1–2 sentences)
+
+## Hypothesis
+What do you predict will happen, and why? Write this BEFORE you run anything.
+
+## Metric
+What number will you compute to decide whether the prediction was supported?
+
+## How to reproduce
+1. Install the dependencies: `pip install -r environment/requirements.txt`
+2. Open `notebook.ipynb` and run all cells from top to bottom.
+3. Raw data is written to `results/raw/` and figures to `results/figures/`.
+
+## Runtime and backend
+- Simulator / backend used:
+- Shots:
+- Approximate run time:
+- QPU used? No / Yes (device, date, jobs, credits or cost):
+</pre>
+
+<h2>REPORT.md — what the result means</h2>
+<pre># Qxx — Project title: Report
+
+## 1. Baseline
+What did you reproduce? State the prediction you wrote before running, then the measured result (give the metric as a number, not only a figure).
+
+## 2. Extension
+Which single primary variable did you change? What stayed fixed? What did you predict?
+
+## 3. Results
+Tables and labeled figures (stored in `results/figures/`). Report the metric for the baseline and for the extension.
+
+## 4. Interpretation
+Did the results support the prediction? Separate three possible sources of any difference:
+1. the ideal mathematical prediction,
+2. finite-shot sampling,
+3. implementation effects such as noise or compilation.
+
+## 5. Uncertainty
+How large is the sampling uncertainty? How do you know (repeated runs, shot count, error estimate)?
+
+## 6. Limitations
+What can this experiment NOT tell us? What would you change with more time or resources?
+
+## 7. Conclusion
+Two or three sentences: what you learned and what evidence supports it.
+
+## Sources
+List every third-party source, tutorial, or code you used.
+</pre>
+
+<h2>What a good answer looks like</h2>
+<table><tr><th>Section</th><th>Weak</th><th>Strong</th></tr>
+<tr><td>Hypothesis</td><td>“I think it will work.”</td><td>“P(0) will be within 0.05 of 0.5 at 1,000 shots, because the ideal probability is ½.”</td></tr>
+<tr><td>Results</td><td>A screenshot of a histogram.</td><td>A table of counts, the metric as a number, and a labeled figure made from the saved data.</td></tr>
+<tr><td>Extension</td><td>Several things changed at once.</td><td>One variable changed, the others listed as fixed.</td></tr>
+<tr><td>Interpretation</td><td>“The result was close.”</td><td>“The remaining difference of 0.014 is consistent with sampling error at 1,000 shots.”</td></tr>
+<tr><td>Limitations</td><td>Left empty.</td><td>“A simulator has no hardware noise, so this says nothing about a real device.”</td></tr></table>
+
+<h2>Explaining a difference between prediction and result</h2>
+<p>When your measurement does not match the ideal value, decide which of three layers can explain it:</p>
+<ol><li><b>The ideal mathematical prediction</b> — was the calculation itself right?</li><li><b>Finite-shot sampling</b> — is the difference the size you expect from randomness?</li><li><b>Implementation effects</b> — noise or compilation, when you use a noisy simulator or real hardware.</li></ol>
+
+<h2>Final checklist</h2>
+<p>This is the same checklist you confirm when you open your Pull Request.</p>
+<div class="project"><ul><li>README reproduces the work</li><li>Notebook is executable, or its limitations are documented</li><li>Raw data included</li><li>Figures labeled</li><li>REPORT interprets uncertainty and limitations</li><li>Dependencies documented</li><li>No secrets or private information</li><li>Third-party sources and code cited</li></ul></div>
+<p class="actions"><a class="button" href="guide-github-submission.html">Next: Guide 3 — Submitting with GitHub</a><a class="button ghost" href="start-here.html">Back to Start Here</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>

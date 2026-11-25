@@ -1,0 +1,86 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Guide 1 — Your First Project | OQCL</title><meta name="description" content="A step-by-step walkthrough of Q01 Quantum Coin with working code, raw data, a figure, and an extension."><link rel="stylesheet" href="assets/style.css"></head><body><header><b>OQCL</b> &nbsp; <a href="index.html">Home</a><a href="start-here.html">Start Here</a><a href="contents.html">Textbook</a><a href="projects.html">Projects</a><a href="quest-lab.html">QUEST Lab</a><a href="submit.html">Submit</a><a href="use-cases.html">Use Cases</a><a href="instructor.html">Instructor Guide</a><a href="references.html">References</a></header><main><p class="crumbs"><a href="start-here.html">Start Here</a> › Student guides</p>
+<h1>Guide 1 — Your first project, step by step</h1>
+<p><span class="badge">About 30 minutes</span><span class="badge">Simulator only</span></p>
+<p class="lead">This guide walks through <a href="projects/q01.html">Q01 — Quantum Coin</a> from an empty folder to a finished experiment. Every later project follows the same routine, so learning it once here saves time on all of them.</p>
+<div class="note"><b>About the tool.</b> OQCL is platform-neutral and you may use any suitable simulator. The code below uses Qiskit with the Aer simulator as one working option. It was tested with Qiskit 2.6 and Qiskit Aer 0.18.</div>
+
+<h2>Step 1 — Read first</h2>
+<p>Read <a href="chapters/ch01.html">Chapter 1</a>. You need one idea from it: a qubit prepared with a Hadamard gate, H|0⟩, has probability ½ of giving 0 and ½ of giving 1 when measured.</p>
+
+<h2>Step 2 — Write your prediction before any code</h2>
+<p>Open a text file and answer these three questions. This is the part students skip, and it is the part that makes the work scientific.</p>
+<div class="project"><ol><li><b>State.</b> H|0⟩ = (|0⟩ + |1⟩)/√2.</li><li><b>Prediction.</b> P(0) will be close to 0.5, and it will get closer as the number of shots grows.</li><li><b>Metric.</b> The distance from the ideal value, |P(0) − 0.5|, for 10, 100, 1,000, and 10,000 shots.</li></ol></div>
+
+<h2>Step 3 — Create your project folder</h2>
+<p>Use your own GitHub username in the folder name.</p>
+<pre>projects/q01-yourgithubname/
+  README.md
+  notebook.ipynb
+  results/raw/
+  results/figures/
+  environment/requirements.txt
+  REPORT.md</pre>
+
+<h2>Step 4 — Set up the software</h2>
+<p>You need Python 3. In a terminal, or in the first cell of a notebook with <code>!</code> in front, run:</p>
+<pre>pip install qiskit qiskit-aer matplotlib</pre>
+
+<h2>Step 5 — Run the baseline</h2>
+<p>Put this in <code>notebook.ipynb</code> and run it. It builds the circuit, runs it for each shot count, saves the raw counts, and draws one figure.</p>
+<pre>import json, os
+from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
+import matplotlib.pyplot as plt
+
+# 1. Build the circuit: H on |0&gt;, then measure
+qc = QuantumCircuit(1, 1)
+qc.h(0)
+qc.measure(0, 0)
+
+# 2. Run the baseline for each shot count
+sim = AerSimulator(seed_simulator=7)
+results = []
+for shots in [10, 100, 1000, 10000]:
+    counts = sim.run(qc, shots=shots).result().get_counts()
+    p0 = counts.get(&quot;0&quot;, 0) / shots
+    p1 = counts.get(&quot;1&quot;, 0) / shots
+    results.append({&quot;shots&quot;: shots, &quot;counts&quot;: counts,
+                    &quot;P0&quot;: p0, &quot;P1&quot;: p1, &quot;abs_error&quot;: abs(p0 - 0.5)})
+    print(shots, counts, round(p0, 4), round(abs(p0 - 0.5), 4))
+
+# 3. Save the raw data (never only a screenshot)
+os.makedirs(&quot;results/raw&quot;, exist_ok=True)
+os.makedirs(&quot;results/figures&quot;, exist_ok=True)
+with open(&quot;results/raw/q01_counts.json&quot;, &quot;w&quot;) as f:
+    json.dump(results, f, indent=2)
+
+# 4. One labeled figure
+plt.plot([r[&quot;shots&quot;] for r in results], [r[&quot;abs_error&quot;] for r in results], &quot;o-&quot;)
+plt.xscale(&quot;log&quot;)
+plt.xlabel(&quot;Number of shots&quot;)
+plt.ylabel(&quot;|P(0) - 0.5|&quot;)
+plt.title(&quot;Q01: sampling error vs. shots&quot;)
+plt.savefig(&quot;results/figures/q01_error_vs_shots.png&quot;, dpi=150, bbox_inches=&quot;tight&quot;)
+</pre>
+
+<h2>Step 6 — Check what you got</h2>
+<p>You should see four lines, one per shot count. Your numbers will differ from these because measurement is random, but the pattern should be the same: the error gets smaller as shots increase.</p>
+<table><tr><th>Shots</th><th>Example counts</th><th>P(0)</th><th>|P(0) − 0.5|</th></tr>
+<tr><td>10</td><td>0: 4, 1: 6</td><td>0.40</td><td>0.10</td></tr>
+<tr><td>100</td><td>0: 54, 1: 46</td><td>0.54</td><td>0.04</td></tr>
+<tr><td>1,000</td><td>0: 514, 1: 486</td><td>0.514</td><td>0.014</td></tr>
+<tr><td>10,000</td><td>0: 5012, 1: 4988</td><td>0.5012</td><td>0.0012</td></tr></table>
+<p>Two files should now exist: <code>results/raw/q01_counts.json</code> and <code>results/figures/q01_error_vs_shots.png</code>. If they do, your baseline is done.</p>
+
+<h2>Step 7 — Add one controlled extension</h2>
+<p>Change exactly one thing and keep everything else fixed. Write a prediction first. Two ideas that fit Q01:</p>
+<ul><li><b>Repeat the experiment.</b> Run each shot count 20 times and look at how much P(0) varies between runs. Prediction to test: the spread shrinks as shots grow.</li><li><b>Change the state.</b> Replace <code>qc.h(0)</code> with <code>qc.x(0)</code> and predict the counts before you run it.</li></ul>
+
+<h2>Step 8 — Record your environment</h2>
+<p>So that someone else can reproduce your result, save the exact package versions:</p>
+<pre>pip freeze &gt; environment/requirements.txt</pre>
+
+<h2>Step 9 — Write it up</h2>
+<p>Fill in <code>README.md</code> and <code>REPORT.md</code>. Guide 2 gives you templates for both.</p>
+<div class="problem"><h3>Before you move on, check</h3><ul><li>The prediction was written before the code was run.</li><li>Raw counts are saved as a file, not only shown on screen.</li><li>The metric is a number.</li><li>The figure has axis labels and a title.</li><li>No passwords, tokens, or API keys are anywhere in the folder.</li></ul></div>
+<p class="actions"><a class="button" href="guide-report.html">Next: Guide 2 — Writing the report</a><a class="button ghost" href="start-here.html">Back to Start Here</a></p></main><footer>Open Quantum Computing Lab (OQCL) · Independent educational resource · Simulator first, hardware second, reproducibility always.</footer></body></html>

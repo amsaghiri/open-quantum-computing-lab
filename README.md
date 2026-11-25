@@ -10,6 +10,9 @@ OQCL is a textbook-first laboratory: scientific concepts and worked examples com
 ## Student flow
 Learn → predict → reproduce baseline → measure → controlled extension → analyze → submit reproducibly.
 
+## Student guides
+New students should begin at `start-here.html`. It links four short manuals: a step-by-step first project (Q01), README/REPORT templates (also in `templates/`), GitHub submission, and the hardware path.
+
 ## Website
 Publish this repository with GitHub Pages. `index.html` is the site entry point.
 
